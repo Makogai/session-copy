@@ -49,10 +49,6 @@ The extension icon should now appear in your toolbar.
 - For best results, make sure you are logged in or have access to the target domain when pasting.
 - After pasting, some websites may need a **manual reload** to reflect the restored session.
 
----
-
-## 🖼️ Icon
-Custom-designed clipboard & sync icon included in `/assets/icons/`.
 
 ---
 
@@ -65,5 +61,4 @@ Custom-designed clipboard & sync icon included in `/assets/icons/`.
 
 ## 🤝 Credits
 Built by **Makogai** with ❤️  
-Icon generated with AI + customized.
 
