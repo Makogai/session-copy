@@ -2,6 +2,51 @@
 <html>
 <head>
   <style>
+      body {
+    font-family: 'Segoe UI', 'Noto Color Emoji', sans-serif;
+  }
+  #toggleChangelog {
+    display: inline-block;
+    padding: 6px 12px;
+    background-color: #ffcc00;
+    color: #222;
+    font-weight: bold;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.3s ease;
+  }
+
+  #toggleChangelog:hover {
+    background-color: #ffb700;
+  }
+
+  #toggleChangelog::after {
+    content: "📝";
+    margin-left: 8px;
+  }
+  #changelog div {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+    margin-bottom: 10px;
+  }
+  .latest {
+    background-color: #e0ffe0;
+    border: 1px solid #4caf50;
+    padding: 10px;
+    border-radius: 5px;
+  }
+  .new-badge {
+    display: inline-block;
+    background-color: #ff4757;
+    color: white;
+    padding: 2px 6px;
+    margin-left: 5px;
+    border-radius: 4px;
+    font-size: 12px;
+  }
     body { 
       width: 200px; 
       padding: 10px; 
@@ -21,11 +66,15 @@
       background-color: #45a049;
     }
   </style>
+  <meta charset='UTF-8' />
 </head>
 <body>
   <button id="copy">Copy Storage & Cookies</button>
   <button id="paste">Paste Storage & Cookies</button>
-  <!-- <p>(I am in "popup.html")</p>   -->
+  <button id="toggleChangelog">Changelog</button>
+  <div id="changelog" style="display: none; margin-top: 10px; max-height: 200px; overflow-y: auto;"></div>
+  
+
   <script src="popup.js"></script>
 </body>
 </html>

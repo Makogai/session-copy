@@ -1,0 +1,15 @@
+{
+    "version": "1.0.0",
+    "date": "2024-03-06",
+    "changes": [
+      "Added functionality to copy localStorage, sessionStorage, and cookies from the active page.",
+      "Implemented Base64 encoding for clipboard export.",
+      "Added support to paste data only on the original site.",
+      "Restored localStorage and sessionStorage via injected page scripts.",
+      "Restored cookies via document.cookie for non-HttpOnly cookies.",
+      "Added validation to check origin match before pasting.",
+      "Displayed logs in the page console for full traceability.",
+      "Removed automatic new tab opening during paste."
+    ]
+  }
+  
