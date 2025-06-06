@@ -1,0 +1,12 @@
+{
+  "version": "1.3.0",
+  "date": "2025-06-07",
+  "title": "UX & UI polish",
+  "changes": [
+    "Always-fresh tab restore – each Paste now opens a **new** tab for the target origin (no more hijacking existing tabs).",
+    "Background service-worker rewritten to guarantee message channel stays open; fixes rare *Receiving end does not exist* error.",
+    "Polished toast flow: clearer success/error colours, spinner auto-dismisses on failure.",
+    "🎉 Fun extras – celebratory confetti burst on successful Copy/Paste **and** a 🎲 Joke button with random tech one-liners (local list, no network calls).",
+    "UI tweaks – popup widened to 300 px, bigger fonts, smoother button hover glow."
+  ]
+}

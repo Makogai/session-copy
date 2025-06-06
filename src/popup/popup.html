@@ -30,6 +30,7 @@ html,body{margin:0;padding:0;width:300px;height:auto;color:#e8e8f2;
 }
 /* --------------  BUTTONS  -------------- */
 button{
+  cursor: pointer;
   width:100%; padding:12px 0; margin-top:14px; letter-spacing:.3px;
   font-weight:600; border:none; border-radius:calc(var(--radius) - 6px);
   background:#1a1a28; color:#f0f0ff; position:relative; overflow:hidden;
@@ -39,6 +40,9 @@ button::before{
   content:""; position:absolute; inset:0; border-radius:inherit;
   background:linear-gradient(130deg,transparent 20%,var(--accent) 70%);
   opacity:.0; transition:opacity .25s;
+}
+#jokeBtn {
+  height: 15px;
 }
 button:hover::before{opacity:.12;}
 button:hover{transform:translateY(-1px);}
@@ -72,8 +76,13 @@ button#accent{
     <button id="copy"  >Copy Storage & Cookies</button>
     <button id="paste" >Paste Storage & Cookies</button>
     <button id="toggleChangelog">Changelog</button>
+
+    <button id="jokeBtn" style="background:#493063;display:flex;align-items:center;justify-content:center">
+  <span style="font-size:17px;margin-right:6px">🎲</span> Joke
+</button>
     <div id="changelog"></div>
   </div>
+<script src="../../libs/confetti.js"></script>
 
   <script type="module" src="popup.js"></script>
 </body>

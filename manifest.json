@@ -39,11 +39,15 @@
     "clipboardRead"
   ],
   "host_permissions": ["https://*/*", "http://*/*", "https://*.firebaseio.com/*",
-    "https://firestore.googleapis.com/*"],
+    "https://firestore.googleapis.com/*", "https://apis.google.com/js/platform.js"],
   "web_accessible_resources": [
   {
-    "resources": ["changelog/*.json", "libs/*"],
+    "resources": ["changelog/*.json", "libs/*", "dino/*", 
+      "icons/dino24.png"],
     "matches": ["<all_urls>"]
+  }],
+  "background": {
+    "service_worker": "src/background.js",
+    "type": "module"
   }
-]
 }
