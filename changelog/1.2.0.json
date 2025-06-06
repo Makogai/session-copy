@@ -1,0 +1,13 @@
+{
+  "version": "1.2.0",
+  "date": "2025-06-06",
+  "changes": [
+    "Switched from clipboard-only blobs to Firebase-backed storage (token size ➜ 35-40 chars)",
+    "End-to-end AES-GCM encryption – backend never sees plaintext",
+    "Added LZ-String compression (payloads 3-8× smaller; fits Firestore 1 MiB limit)",
+    "Replaced blocking alert()s with Toastify JS toasts (non-intrusive UX)",
+    "One-click restore re-implemented inside page context (cookie injection exactly like v1.0)",
+    "New Rollup-bundled firebase.bundle.js (no CSP violations)",
+    "First pass at premium UI – modern glassmorphism panel, neon accent buttons"
+  ]
+}

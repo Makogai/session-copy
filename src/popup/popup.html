@@ -1,80 +1,80 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <style>
-      body {
-    font-family: 'Segoe UI', 'Noto Color Emoji', sans-serif;
-  }
-  #toggleChangelog {
-    display: inline-block;
-    padding: 6px 12px;
-    background-color: #ffcc00;
-    color: #222;
-    font-weight: bold;
-    border: none;
-    border-radius: 20px;
-    font-size: 14px;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: all 0.3s ease;
-  }
+<meta charset="UTF-8" />
+<title>Storage Sync</title>
 
-  #toggleChangelog:hover {
-    background-color: #ffb700;
-  }
+<!-- Toasts + Compression libs -->
+<link rel="stylesheet" href="../../libs/toastify.min.css">
+<script src="../../libs/lz-string.min.js"></script>
+<script src="../../libs/toastify.min.js"></script>
 
-  #toggleChangelog::after {
-    content: "📝";
-    margin-left: 8px;
-  }
-  #changelog div {
-    border-bottom: 1px solid #ddd;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-  }
-  .latest {
-    background-color: #e0ffe0;
-    border: 1px solid #4caf50;
-    padding: 10px;
-    border-radius: 5px;
-  }
-  .new-badge {
-    display: inline-block;
-    background-color: #ff4757;
-    color: white;
-    padding: 2px 6px;
-    margin-left: 5px;
-    border-radius: 4px;
-    font-size: 12px;
-  }
-    body { 
-      width: 200px; 
-      padding: 10px; 
-      font-family: Arial, sans-serif;
-    }
-    button { 
-      width: 100%; 
-      padding: 10px; 
-      margin-top: 10px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-  </style>
-  <meta charset='UTF-8' />
+<style>
+/* --------------  CORE LAYOUT  -------------- */
+:root{
+  --accent      : #7b61ff;           /* neon violet */
+  --accent-glow : #ab9bff55;
+  --bg-panel    : #0f0f17cc;         /* glass */
+  --bg-body     : #07070d url('../../assets/stars.webp') center/cover fixed;
+  --border      : #ffffff22;
+  --radius      : 18px;
+  --blur        : 20px;
+  font-size     : 14px;
+}
+html,body{margin:0;padding:0;width:300px;height:auto;color:#e8e8f2;
+          font-family:"Inter",system-ui,sans-serif;background:var(--bg-body);}
+.main{
+  backdrop-filter:blur(var(--blur)); -webkit-backdrop-filter:blur(var(--blur));
+  background:var(--bg-panel); border:1px solid var(--border);
+  border-radius:var(--radius); padding:20px 18px 24px; box-shadow:0 4px 40px #00000088;
+}
+/* --------------  BUTTONS  -------------- */
+button{
+  width:100%; padding:12px 0; margin-top:14px; letter-spacing:.3px;
+  font-weight:600; border:none; border-radius:calc(var(--radius) - 6px);
+  background:#1a1a28; color:#f0f0ff; position:relative; overflow:hidden;
+  transition:background .25s, transform .2s;
+}
+button::before{
+  content:""; position:absolute; inset:0; border-radius:inherit;
+  background:linear-gradient(130deg,transparent 20%,var(--accent) 70%);
+  opacity:.0; transition:opacity .25s;
+}
+button:hover::before{opacity:.12;}
+button:hover{transform:translateY(-1px);}
+button:active{transform:translateY(1px);}
+#copy   {background:#27313f;}
+#paste  {background:#23314f;}
+#toggleChangelog{background:#444117; color:#fceea1;}
+#toggleChangelog::after{content:"📝";margin-left:6px;}
+/* accent glow */
+button#accent{
+  background:var(--accent); color:#fff;
+  box-shadow:0 0 12px 0 var(--accent-glow), inset 0 0 6px 0 #ffffff22;
+}
+
+/* --------------  CHANGELOG  -------------- */
+#changelog{display:none;margin-top:12px;max-height:240px;overflow:auto;}
+#changelog div{border-bottom:1px solid var(--border);padding:10px 0;}
+#changelog .latest{background:#23233a;border:1px solid var(--accent);}
+.new-badge{
+  display:inline-block;padding:0 6px;font-size:11px;
+  background:var(--accent);border-radius:12px;margin-left:4px;
+}
+/* scrollbar thin */
+#changelog::-webkit-scrollbar{width:5px;}
+#changelog::-webkit-scrollbar-thumb{background:#ffffff22;border-radius:3px;}
+</style>
 </head>
-<body>
-  <button id="copy">Copy Storage & Cookies</button>
-  <button id="paste">Paste Storage & Cookies</button>
-  <button id="toggleChangelog">Changelog</button>
-  <div id="changelog" style="display: none; margin-top: 10px; max-height: 200px; overflow-y: auto;"></div>
-  
 
-  <script src="popup.js"></script>
+<body>
+  <div class="main">
+    <button id="copy"  >Copy Storage & Cookies</button>
+    <button id="paste" >Paste Storage & Cookies</button>
+    <button id="toggleChangelog">Changelog</button>
+    <div id="changelog"></div>
+  </div>
+
+  <script type="module" src="popup.js"></script>
 </body>
 </html>

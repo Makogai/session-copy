@@ -1,7 +1,7 @@
 {
   "name": "Storage Sync Extension",
   "description": "Copy/paste localStorage, sessionStorage, and cookies across devices.",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "manifest_version": 3,
   "action": {
     "default_title": "Storage Sync",
@@ -38,10 +38,11 @@
     "clipboardWrite",
     "clipboardRead"
   ],
-  "host_permissions": ["https://*/*", "http://*/*"],
+  "host_permissions": ["https://*/*", "http://*/*", "https://*.firebaseio.com/*",
+    "https://firestore.googleapis.com/*"],
   "web_accessible_resources": [
   {
-    "resources": ["changelog/*.json"],
+    "resources": ["changelog/*.json", "libs/*"],
     "matches": ["<all_urls>"]
   }
 ]
