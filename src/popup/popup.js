@@ -15,6 +15,7 @@ import {
 } from '../../libs/firebase.bundle.js';
 import { genKey, encrypt, decrypt, b64 } from '../utils/crypto.js';
 
+
 /* ───────── Firebase ───────── */
 const firebaseConfig = {
   apiKey    : 'AIzaSyCJirDPsT_RFApDFQSvYi7NmrBoHCxTGas',
@@ -77,33 +78,100 @@ const injectDataIntoTab = async (tabId, data) => {
 
 /* ───────── COPY ───────── */
 document.getElementById('copy').addEventListener('click', async () => {
-  const working = toast("⏳ Copying session…", "#505068", -1, true); working.showToast();
-  try{
-    const [tab] = await chrome.tabs.query({ active:true, currentWindow:true });
+  const working = toast("⏳ Copying session…", "#505068", -1, true);
+  working.showToast();
+
+  try {
+    const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+
+    // 1) Read raw data from page
     const [{ result: page }] = await chrome.scripting.executeScript({
-      target:{ tabId:tab.id },
-      func  : () => ({
-        localStorage  : Object.fromEntries(Object.entries(localStorage)),
+      target: { tabId: tab.id },
+      func: () => ({
+        localStorage: Object.fromEntries(Object.entries(localStorage)),
         sessionStorage: Object.fromEntries(Object.entries(sessionStorage)),
-        origin        : location.origin
+        origin: location.origin,
+        host: location.hostname
       })
     });
-    const cookies = await chrome.cookies.getAll({ url: page.origin });
 
-    const compressed = LZString.compressToUint8Array(
-      JSON.stringify({ ...page, cookies })
-    );
-    const key            = await genKey();
+    // 2) Filter cookies inline (ChatGPT-safe)
+    const cookies = (await chrome.cookies.getAll({ url: page.origin })).filter(c => {
+      if (
+        c.name.startsWith('__Host-next-auth') ||
+        c.name.startsWith('__Secure-next-auth.session-token') ||
+        c.name === 'cf_clearance'
+      ) return true;
+
+      if (
+        c.httpOnly ||
+        c.name.startsWith('_cf') ||
+        c.name.startsWith('ajs_') ||
+        c.name.startsWith('mp_') ||
+        c.name.startsWith('intercom')
+      ) return false;
+
+      if (c.domain.includes('openai.com')) return false;
+
+      return true;
+    });
+
+    // 3) Filter localStorage ONLY for ChatGPT
+    const isChatGPT =
+      page.host === 'chat.openai.com' ||
+      page.host === 'chatgpt.com';
+
+    const filteredLS = {};
+    for (const [k, v] of Object.entries(page.localStorage)) {
+      if (!isChatGPT) {
+        filteredLS[k] = v;
+      } else if (
+        k === 'oai/apps/auth' ||
+        k === 'oai/apps/session' ||
+        k === 'oai/apps/user' ||
+        k === 'oai/apps/csrf'
+      ) {
+        filteredLS[k] = v;
+      }
+    }
+
+    // 4) Drop sessionStorage for ChatGPT
+    const filteredSS = isChatGPT ? {} : page.sessionStorage;
+
+    // 5) Compact payload keys
+    const payload = {
+      l: filteredLS,
+      s: filteredSS,
+      c: cookies,
+      o: page.origin
+    };
+
+    const json = JSON.stringify(payload);
+    const compressed = LZString.compressToUint8Array(json);
+
+    console.log('Compressed bytes:', compressed.length);
+
+    const key = await genKey();
     const { iv, cipher } = await encrypt(key, compressed);
 
-    const docRef = await addDoc(colRef,{ c:Array.from(cipher), i:Array.from(iv), ts:Date.now() });
+    const docRef = await addDoc(colRef, {
+      c: Array.from(cipher),
+      i: Array.from(iv),
+      ts: Date.now()
+    });
+
     await navigator.clipboard.writeText(`${docRef.id}#${b64.enc(key)}`);
 
     working.hideToast();
-    popConfetti(); 
+    popConfetti();
     toast("✅ Session copied!").showToast();
-  }catch(err){ console.error(err); working.hideToast(); toast("❌ Copy failed","crimson").showToast(); }
+  } catch (err) {
+    console.error(err);
+    working.hideToast();
+    toast("❌ Copy failed", "crimson").showToast();
+  }
 });
+
 
 /* --- PASTE (now hands work to background) --- */
 document.getElementById('paste').addEventListener('click', async () => {
@@ -123,7 +191,15 @@ document.getElementById('paste').addEventListener('click', async () => {
     const plain = LZString.decompressFromUint8Array(
       await decrypt(keyBytes,{ cipher:new Uint8Array(c), iv:new Uint8Array(i) })
     );
-    const data = JSON.parse(plain);
+    const p = JSON.parse(plain);
+
+const data = p.localStorage ? p : {
+  localStorage: p.l || {},
+  sessionStorage: p.s || {},
+  cookies: p.c || [],
+  origin: p.o
+};
+
 
     /* hand over to background */
     const bgResp = await chrome.runtime.sendMessage({ action:"openAndRestore", data });

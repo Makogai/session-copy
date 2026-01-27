@@ -1,0 +1,13 @@
+{
+  "version": "1.4.0",
+  "date": "2026-01-27",
+  "title": "ChatGPT-optimized session compression",
+  "changes": [
+    "Significantly reduced session size for ChatGPT by aggressively filtering localStorage to only essential auth/session keys.",
+    "ChatGPT-specific optimization: sessionStorage is now excluded entirely, preventing large non-essential payloads.",
+    "Cookie filtering refined to keep only required authentication cookies while dropping analytics and bot-related data.",
+    "Improved Firestore reliability – optimized payloads now stay safely under the 1 MB document size limit for supported sites.",
+    "Internal copy logic refactored to avoid MV3 module import issues, restoring full popup responsiveness and button reliability.",
+    "No functional changes for non-ChatGPT websites – existing copy/paste behavior remains unchanged."
+  ]
+}
