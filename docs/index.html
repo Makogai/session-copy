@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Session Copy — copy and restore encrypted browser sessions for any website. Offline, private, built for Chrome." />
+  <title>Session Copy — Secure session transfer for Chrome</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="./">
+        <img src="https://raw.githubusercontent.com/Makogai/session-copy/main/assets/images/logo512.png" width="36" height="36" alt="" />
+        Session Copy
+      </a>
+      <nav class="nav" aria-label="Site">
+        <a href="#features">Features</a>
+        <a href="#how">How it works</a>
+        <a href="#install">Install</a>
+        <a href="https://github.com/Makogai/session-copy/blob/main/PRIVACY.md">Privacy</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <img
+          class="hero-logo"
+          src="https://raw.githubusercontent.com/Makogai/session-copy/main/assets/images/logo512.png"
+          width="88"
+          height="88"
+          alt="Session Copy logo"
+        />
+        <h1>Secure session transfer<br />for any website</h1>
+        <p class="lead">
+          Copy an encrypted snapshot of your login session and paste it on another browser or machine.
+          Everything stays on your device — no cloud account required.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#install">Get started</a>
+          <a class="btn btn-secondary" href="https://github.com/Makogai/session-copy" target="_blank" rel="noopener noreferrer">
+            View on GitHub
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="features">
+      <div class="container">
+        <h2 class="section-title">Built for real workflows</h2>
+        <p class="section-sub">Share logins with your team, test in incognito, or move sessions between machines — without storing secrets on a server.</p>
+        <div class="features">
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🔒</div>
+            <h3>Encrypted & offline</h3>
+            <p>Sessions are compressed and encrypted locally. Clipboard or file — you choose how to share.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🌐</div>
+            <h3>Works on any site</h3>
+            <p>Captures storage and cookies (including HttpOnly) with smart login-only mode to keep payloads small.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">⚡</div>
+            <h3>Login transfer mode</h3>
+            <p>Default mode copies only auth-related data — faster, smaller, and better for sites like ChatGPT.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">📁</div>
+            <h3>File export</h3>
+            <p>Large sessions? Save an encrypted <code>.session</code> file instead of a huge clipboard string.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="how" style="padding-top: 0;">
+      <div class="container">
+        <h2 class="section-title">How it works</h2>
+        <p class="section-sub">Three steps. No account signup.</p>
+        <div class="steps">
+          <article class="step">
+            <h3>Copy</h3>
+            <p>Log in on a site, open Session Copy, and copy the encrypted session from the active tab.</p>
+          </article>
+          <article class="step">
+            <h3>Share</h3>
+            <p>Send the token or file through your usual channel — treat it like a password.</p>
+          </article>
+          <article class="step">
+            <h3>Paste</h3>
+            <p>On another browser, paste or import. The extension opens the site and restores your session.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="privacy-band">
+      <div class="container">
+        <p><strong>Privacy first.</strong> We don’t run a session database. Your data never leaves your control unless you copy or export it yourself.</p>
+        <a class="btn btn-secondary" href="https://github.com/Makogai/session-copy/blob/main/PRIVACY.md">Read privacy policy</a>
+      </div>
+    </section>
+
+    <section id="install">
+      <div class="container" style="text-align: center;">
+        <h2 class="section-title">Install</h2>
+        <p class="section-sub">
+          Chrome Web Store listing
+          <span class="coming-soon">Coming soon</span>
+        </p>
+        <div class="hero-actions" style="margin-bottom: 24px;">
+          <a class="btn btn-primary" href="https://github.com/Makogai/session-copy#install-developer-mode" target="_blank" rel="noopener noreferrer">
+            Developer install guide
+          </a>
+          <a class="btn btn-secondary" href="https://github.com/Makogai/session-copy/releases" target="_blank" rel="noopener noreferrer">
+            Releases
+          </a>
+        </div>
+        <p style="max-width: 480px; margin: 0 auto; font-size: 0.9rem; color: var(--color-text-muted);">
+          For now: clone the repo, open <code>chrome://extensions</code>, enable Developer mode, and load unpacked.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <nav class="links" aria-label="Footer">
+        <a href="https://github.com/Makogai/session-copy">GitHub</a>
+        <a href="https://github.com/Makogai/session-copy/issues">Issues</a>
+        <a href="https://github.com/Makogai/session-copy/releases">Releases</a>
+        <a href="https://github.com/Makogai/session-copy/blob/main/PRIVACY.md">Privacy</a>
+      </nav>
+      <p>Session Copy · Encrypted session transfer for Chrome</p>
+    </div>
+  </footer>
+</body>
+</html>

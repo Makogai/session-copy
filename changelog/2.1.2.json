@@ -1,0 +1,11 @@
+{
+  "version": "2.1.2",
+  "date": "2026-05-15",
+  "title": "Cleaner Info panel",
+  "changes": [
+    "Compact link rows with icons (GitHub, website, privacy, and more).",
+    "What's new shows only the latest release — full history on GitHub.",
+    "GitHub Pages site: makogai.github.io/session-copy",
+    "Improved Info layout for a smaller, store-ready popup."
+  ]
+}

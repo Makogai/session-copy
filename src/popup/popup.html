@@ -1,89 +1,149 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<title>Storage Sync</title>
-
-<!-- Toasts + Compression libs -->
-<link rel="stylesheet" href="../../libs/toastify.min.css">
-<script src="../../libs/lz-string.min.js"></script>
-<script src="../../libs/toastify.min.js"></script>
-
-<style>
-/* --------------  CORE LAYOUT  -------------- */
-:root{
-  --accent      : #7b61ff;           /* neon violet */
-  --accent-glow : #ab9bff55;
-  --bg-panel    : #0f0f17cc;         /* glass */
-  --bg-body     : #07070d url('../../assets/stars.webp') center/cover fixed;
-  --border      : #ffffff22;
-  --radius      : 18px;
-  --blur        : 20px;
-  font-size     : 14px;
-}
-html,body{margin:0;padding:0;width:300px;height:auto;color:#e8e8f2;
-          font-family:"Inter",system-ui,sans-serif;background:var(--bg-body);}
-.main{
-  backdrop-filter:blur(var(--blur)); -webkit-backdrop-filter:blur(var(--blur));
-  background:var(--bg-panel); border:1px solid var(--border);
-  border-radius:var(--radius); padding:20px 18px 24px; box-shadow:0 4px 40px #00000088;
-}
-/* --------------  BUTTONS  -------------- */
-button{
-  cursor: pointer;
-  width:100%; padding:12px 0; margin-top:14px; letter-spacing:.3px;
-  font-weight:600; border:none; border-radius:calc(var(--radius) - 6px);
-  background:#1a1a28; color:#f0f0ff; position:relative; overflow:hidden;
-  transition:background .25s, transform .2s;
-}
-button::before{
-  content:""; position:absolute; inset:0; border-radius:inherit;
-  background:linear-gradient(130deg,transparent 20%,var(--accent) 70%);
-  opacity:.0; transition:opacity .25s;
-}
-#jokeBtn {
-  height: 15px;
-}
-button:hover::before{opacity:.12;}
-button:hover{transform:translateY(-1px);}
-button:active{transform:translateY(1px);}
-#copy   {background:#27313f;}
-#paste  {background:#23314f;}
-#toggleChangelog{background:#444117; color:#fceea1;}
-#toggleChangelog::after{content:"📝";margin-left:6px;}
-/* accent glow */
-button#accent{
-  background:var(--accent); color:#fff;
-  box-shadow:0 0 12px 0 var(--accent-glow), inset 0 0 6px 0 #ffffff22;
-}
-
-/* --------------  CHANGELOG  -------------- */
-#changelog{display:none;margin-top:12px;max-height:240px;overflow:auto;}
-#changelog div{border-bottom:1px solid var(--border);padding:10px 0;}
-#changelog .latest{background:#23233a;border:1px solid var(--accent);}
-.new-badge{
-  display:inline-block;padding:0 6px;font-size:11px;
-  background:var(--accent);border-radius:12px;margin-left:4px;
-}
-/* scrollbar thin */
-#changelog::-webkit-scrollbar{width:5px;}
-#changelog::-webkit-scrollbar-thumb{background:#ffffff22;border-radius:3px;}
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Session Copy</title>
+  <link rel="stylesheet" href="popup.css" />
 </head>
-
 <body>
-  <div class="main">
-    <button id="copy"  >Copy Storage & Cookies</button>
-    <button id="paste" >Paste Storage & Cookies</button>
-    <button id="toggleChangelog">Changelog</button>
+  <div class="app">
+    <header class="header">
+      <img
+        class="logo"
+        src="../../assets/images/logo512.png"
+        width="40"
+        height="40"
+        alt="Session Copy"
+      />
+      <div>
+        <h1 class="brand-title">Session Copy</h1>
+        <p class="brand-tagline">Secure session transfer for any website</p>
+      </div>
+    </header>
 
-    <button id="jokeBtn" style="background:#493063;display:flex;align-items:center;justify-content:center">
-  <span style="font-size:17px;margin-right:6px">🎲</span> Joke
-</button>
-    <div id="changelog"></div>
+    <main class="card card-body">
+      <!-- Home -->
+      <div class="view" data-view="home">
+        <p class="section-label">Transfer</p>
+        <div class="actions-main">
+          <button type="button" class="btn btn-primary" id="copy" data-action="copy">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <rect x="9" y="9" width="11" height="11" rx="2" stroke="currentColor" stroke-width="1.75"/>
+              <path d="M6 15H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v1" stroke="currentColor" stroke-width="1.75"/>
+            </svg>
+            Copy session
+          </button>
+          <button type="button" class="btn btn-accent" id="paste" data-action="paste">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+              <rect x="9" y="3" width="6" height="4" rx="1" stroke="currentColor" stroke-width="1.75"/>
+              <path d="M9 12h6M9 16h4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+            </svg>
+            Paste session
+          </button>
+        </div>
+
+        <p class="section-label">File</p>
+        <div class="actions-file">
+          <button type="button" class="btn btn-ghost btn-ghost--accent" id="exportFile" data-action="export">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 3v12M8 11l4 4 4-4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+            </svg>
+            Export
+          </button>
+          <button type="button" class="btn btn-ghost btn-ghost--accent" id="importPick" data-action="import">
+            <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M12 21V9M16 13l-4-4-4 4" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              <path d="M4 7V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v2" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+            </svg>
+            Import
+          </button>
+        </div>
+        <input type="file" id="fileInput" accept=".session,application/octet-stream,*/*" />
+
+        <div id="status" class="status" role="status" aria-live="polite">
+          <span class="status-dot" aria-hidden="true"></span>
+          <span class="status-text" id="statusText"></span>
+        </div>
+
+        <p class="home-hint">Encrypted on your device. Treat shared sessions like passwords.</p>
+      </div>
+
+      <!-- Settings -->
+      <div class="view" data-view="settings" hidden>
+        <p class="panel-title">Settings</p>
+        <p class="panel-lead">Tune how sessions are captured before you copy or export.</p>
+
+        <section class="settings-panel" aria-label="Capture options">
+          <label class="toggle">
+            <input type="checkbox" id="loginOnlyMode" checked />
+            <span class="toggle-track" aria-hidden="true"></span>
+            <span class="toggle-text">
+              <span class="toggle-label">Login transfer only</span>
+              <span class="toggle-hint">Recommended — copies auth cookies and keys only</span>
+            </span>
+          </label>
+          <label class="toggle">
+            <input type="checkbox" id="strictCookies" />
+            <span class="toggle-track" aria-hidden="true"></span>
+            <span class="toggle-text">
+              <span class="toggle-label">Stricter cookie filter</span>
+              <span class="toggle-hint">When full sync is on — drops more analytics cookies</span>
+            </span>
+          </label>
+        </section>
+
+        <div class="info-callout">
+          <strong>Tip</strong>
+          <p>For incognito paste, enable this extension in incognito under <em>chrome://extensions</em> → Details → Allow in incognito.</p>
+        </div>
+      </div>
+
+      <!-- Info -->
+      <div class="view" data-view="info" hidden>
+        <div class="info-hero">
+          <p class="info-version">Version <span id="appVersion">—</span></p>
+          <p class="info-tagline" id="infoTagline"></p>
+        </div>
+
+        <p class="section-label">Links</p>
+        <nav class="link-list" id="infoLinks" aria-label="External links"></nav>
+
+        <p class="section-label">What’s new</p>
+        <div id="whatsNew" class="whats-new-card"></div>
+        <button type="button" class="btn-link" id="viewReleases">View all releases on GitHub</button>
+
+        <p class="panel-muted about-blurb">
+          Encrypted on your device. Nothing is uploaded to a cloud server.
+        </p>
+      </div>
+    </main>
+
+    <nav class="bottom-nav" aria-label="Main">
+      <button type="button" class="nav-btn is-active" data-nav="home" aria-current="page">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 10.5L12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5H5.5A1.5 1.5 0 0 1 4 19v-8.5z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/>
+        </svg>
+        Home
+      </button>
+      <button type="button" class="nav-btn" data-nav="settings">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="3" stroke="currentColor" stroke-width="1.75"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+        </svg>
+        Settings
+      </button>
+      <button type="button" class="nav-btn" data-nav="info">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.75"/>
+          <path d="M12 11v5M12 8h.01" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"/>
+        </svg>
+        Info
+      </button>
+    </nav>
   </div>
-<script src="../../libs/confetti.js"></script>
-
   <script type="module" src="popup.js"></script>
 </body>
 </html>

@@ -1,84 +1,108 @@
-const waitTabComplete = tabId =>
-  new Promise(resolve => {
-    const listener = (id, info) => {
-      if (id === tabId && info.status === 'complete') {
-        chrome.tabs.onUpdated.removeListener(listener);
-        resolve();
-      }
-    };
-    chrome.tabs.onUpdated.addListener(listener);
-  });
+import { applyCookiesToOrigin } from './core/cookies-apply.js';
 
-/* Inject localStorage, sessionStorage and cookies into a page */
-const injectIntoTab = (tabId, data) =>
-  chrome.scripting.executeScript({
+const PENDING_RESTORE_KEY = 'pendingRestore';
+
+/**
+ * @param {string} originNorm
+ * @param {string} [url]
+ */
+function isFirstPartyUrl(originNorm, url) {
+  if (!url || url.startsWith('chrome://')) return false;
+  try {
+    return new URL(url).origin === originNorm;
+  } catch {
+    return false;
+  }
+}
+
+/** Inject localStorage + sessionStorage only (cookies via chrome.cookies API). */
+function injectStorageIntoTab(tabId, data, { world } = {}) {
+  return chrome.scripting.executeScript({
     target: { tabId },
-    args:   [data],
-    func:   d => {
-      /* LS / SS */
-      Object.entries(d.localStorage  ).forEach(([k, v]) => localStorage.setItem(k, v));
-      Object.entries(d.sessionStorage).forEach(([k, v]) => sessionStorage.setItem(k, v));
-
-      /* Cookies */
-      (d.cookies || []).forEach(c => {
-        let str = `${c.name}=${c.value}; path=${c.path || '/'};`;
-        if (c.secure)        str += ' Secure;';
-        if (c.sameSite)      str += ` SameSite=${c.sameSite};`;
-        if (c.expirationDate)
-          str += ` Expires=${new Date(c.expirationDate * 1000).toUTCString()};`;
-        document.cookie = str;
+    world,
+    args: [{ localStorage: data.localStorage, sessionStorage: data.sessionStorage }],
+    func: d => {
+      Object.entries(d.localStorage).forEach(([k, v]) => {
+        try {
+          localStorage.setItem(k, v);
+        } catch (e) {
+          console.warn('[session-copy] localStorage set failed', k, e);
+        }
+      });
+      Object.entries(d.sessionStorage).forEach(([k, v]) => {
+        try {
+          sessionStorage.setItem(k, v);
+        } catch (e) {
+          console.warn('[session-copy] sessionStorage set failed', k, e);
+        }
       });
     }
   });
+}
 
-/* Message listener */
+/**
+ * @param {object} data restore payload
+ */
+async function stashPendingRestore(data) {
+  await chrome.storage.session.set({ [PENDING_RESTORE_KEY]: data });
+}
+
+async function clearPendingRestore() {
+  await chrome.storage.session.remove(PENDING_RESTORE_KEY);
+}
+
 chrome.runtime.onMessage.addListener((msg, _sender, sendResponse) => {
-  if (msg.action !== 'openAndRestore') return;     
+  if (msg.action !== 'openAndRestore') return;
 
   (async () => {
     try {
-      const { data } = msg;             
-      const origin   = data.origin;    
+      const { data } = msg;
+      const originNorm = new URL(data.origin).origin;
+      const cookies = data.cookies || [];
 
-      /* 1️⃣  ALWAYS create a fresh tab */
-      const tab = await chrome.tabs.create({ url: origin, active: true });
+      await stashPendingRestore({
+        origin: originNorm,
+        localStorage: data.localStorage || {},
+        sessionStorage: data.sessionStorage || {}
+      });
 
-      /* 2️⃣  wait for load and inject data */
-      await waitTabComplete(tab.id);
-      /* tiny helper to run confetti inside the tab */
-/* --------------------------------------------
-   helper: run confetti inside the target tab  */
-const runConfettiInTab = async tabId => {
-  /* 1️⃣  inject the library file (only once per tab) */
-  await chrome.scripting.executeScript({
-    target: { tabId },
-    files : ['libs/confetti.js']          // path relative to extension root
-  });
+      const tab = await chrome.tabs.create({ url: data.origin, active: true });
+      const tabId = tab.id;
 
-  /* 2️⃣  fire a burst */
-  /* 2️⃣  fire a BIGGER burst */
-await chrome.scripting.executeScript({
-  target: { tabId },
-  func: () => {
-    confetti({
-      origin: { y: 0.8 },
-      particleCount: 560,   // ← more pieces
-      spread: 275,
-      scalar: 1.4,          // ← each piece ~40 % larger
-      ticks: 250            // (optional) hang on screen a bit longer
-    });
-  }
-});
+      await new Promise(resolve => {
+        const listener = (id, info) => {
+          if (id !== tabId) return;
+          if (info.status === 'loading' && info.url && isFirstPartyUrl(originNorm, info.url)) {
+            void applyCookiesToOrigin(data.origin, cookies);
+          }
+          if (info.status === 'complete') {
+            chrome.tabs.onUpdated.removeListener(listener);
+            resolve(undefined);
+          }
+        };
+        chrome.tabs.onUpdated.addListener(listener);
+      });
 
-};
+      const { set, failed } = await applyCookiesToOrigin(data.origin, cookies);
+      await injectStorageIntoTab(tabId, data, { world: 'MAIN' });
 
-      await injectIntoTab(tab.id, data);
+      // Second navigation so NextAuth / SPA re-reads cookies + storage (critical for ChatGPT).
+      await chrome.tabs.reload(tabId);
+      await new Promise(resolve => {
+        const listener = (id, info) => {
+          if (id === tabId && info.status === 'complete') {
+            chrome.tabs.onUpdated.removeListener(listener);
+            resolve(undefined);
+          }
+        };
+        chrome.tabs.onUpdated.addListener(listener);
+      });
 
-      await runConfettiInTab(tab.id);
-
-      sendResponse({ ok: true });
+      await clearPendingRestore();
+      sendResponse({ ok: true, cookiesSet: set, cookiesFailed: failed });
     } catch (e) {
       console.error(e);
+      await clearPendingRestore();
       sendResponse({ ok: false, error: e.message });
     }
   })();

@@ -1,10 +1,10 @@
 {
-  "name": "Storage Sync Extension",
-  "description": "Copy/paste localStorage, sessionStorage, and cookies across devices.",
-  "version": "1.2.0",
+  "name": "Session Copy",
+  "description": "Copy and restore encrypted login sessions for any website. Offline, private, and built for secure transfer between browsers.",
+  "version": "2.1.2",
   "manifest_version": 3,
   "action": {
-    "default_title": "Storage Sync",
+    "default_title": "Session Copy",
     "default_popup": "src/popup/popup.html",
     "default_icon": {
       "16": "assets/icons/icon16.png",
@@ -36,16 +36,10 @@
     "scripting",
     "cookies",
     "clipboardWrite",
-    "clipboardRead"
+    "clipboardRead",
+    "storage"
   ],
-  "host_permissions": ["https://*/*", "http://*/*", "https://*.firebaseio.com/*",
-    "https://firestore.googleapis.com/*", "https://apis.google.com/js/platform.js"],
-  "web_accessible_resources": [
-  {
-    "resources": ["changelog/*.json", "libs/*", "dino/*", 
-      "icons/dino24.png"],
-    "matches": ["<all_urls>"]
-  }],
+  "host_permissions": ["https://*/*", "http://*/*"],
   "background": {
     "service_worker": "src/background.js",
     "type": "module"

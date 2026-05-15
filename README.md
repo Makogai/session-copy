@@ -1,64 +1,38 @@
-# 📝 Storage Sync Chrome Extension
+# Session Copy (Chrome extension)
 
-A lightweight Chrome Extension to **copy and paste** `localStorage`, `sessionStorage`, and **cookies** from one website and easily restore them on the same website, even on another device.
+**Website:** [makogai.github.io/session-copy](https://makogai.github.io/session-copy/) · **GitHub Pages setup:** [docs/GITHUB_PAGES.md](docs/GITHUB_PAGES.md)
 
-Perfect for replicating sessions between browsers or machines.
+Offline-first tool to **copy** and **paste** an encrypted snapshot of **localStorage**, **sessionStorage**, and **cookies** for the **current website**, so you can reuse the same session on another browser or machine.
 
----
+- **No Firebase / no cloud vault** — ciphertext lives only in your clipboard or a `.session` file you save.
+- **Large sessions** — if the clipboard string would exceed a safe size, the extension saves an **encrypted file** instead.
+- **HttpOnly cookies** — restored with `chrome.cookies.set` from the service worker (not via `document.cookie`).
 
-## 🚀 Features:
-- ✅ Copy all `localStorage`, `sessionStorage`, and cookies from the active website.
-- ✅ Paste them back into the original site automatically.
-- ✅ Auto-opens the correct site when pasting.
-- ✅ Shows logs directly in the website's console.
-- ✅ Supports clipboard syncing.
+## Install (developer mode)
 
----
+1. Open `chrome://extensions/`.
+2. Enable **Developer mode**.
+3. **Load unpacked** and select this folder (the one containing `manifest.json`).
 
-## 🛠️ Installation (Development Mode)
+## Usage
 
-1. **Download the extension code**.
-2. Open Chrome and go to:chrome://extensions/
-3. Enable **Developer mode** (toggle in the top right corner).
-4. Click on **Load unpacked**.
-5. Select the extension's root folder (the one containing `manifest.json`).
-6. Done! 🎉
+1. Log in on the site you care about.
+2. Open the extension → **Copy session** (or **Save encrypted file**).
+3. On the other machine: **Paste session** from the clipboard, or **Import encrypted file**.
 
-The extension icon should now appear in your toolbar.
+If the page still looks logged out, **reload** once. Some sites keep state outside cookies/DOM storage.
 
----
+## Capture modes
 
-## 🧠 How to use:
+- **Login transfer only** (default): copies a small allowlist of storage keys and cookies that typically carry auth (e.g. NextAuth `__Secure-*` cookies plus OpenAI’s `oai/apps/auth|session|user|csrf` keys). Dumps UI state, drafts, connector prefs, etc.
+- **Full storage sync** (uncheck in the popup): older “copy almost everything except obvious junk” behavior; payloads are much larger.
 
-### ✅ To copy:
-1. Go to the website you want to copy data from (example: `https://chatgpt.com`).
-2. Click on the extension icon.
-3. Press **"Copy Storage & Cookies"**.
-4. The data is now saved to your clipboard.
+## Limits
 
-### ✅ To paste:
-1. On any site or page, click the extension icon.
-2. Press **"Paste Storage & Cookies"**.
-3. The extension will automatically open the original site and restore all data.
-4. Logs will be visible in the **Console (F12)** of the page.
+- **IndexedDB**, **Cache Storage**, and **Service Worker** caches are not exported.
+- **HttpOnly** cookies are included when Chrome exposes them to extensions; setting them can still fail for domain/path/`__Host-` rules — failures are logged in the service worker console.
+- Optional **Stricter cookie filter** drops more analytics-style cookies.
 
----
+## Privacy
 
-## ⚠️ Notes:
-- `HttpOnly` cookies **cannot be restored** due to browser security.
-- For best results, make sure you are logged in or have access to the target domain when pasting.
-- After pasting, some websites may need a **manual reload** to reflect the restored session.
-
-
----
-
-## 📌 Future improvements:
-- Export/import data via a file.
-- Automatic page reload after pasting.
-- Visual log inside the popup.
-
----
-
-## 🤝 Credits
-Built by **Makogai** with ❤️  
-
+See [PRIVACY.md](PRIVACY.md). For publishing to the Chrome Web Store, see [docs/CHROME_WEB_STORE.md](docs/CHROME_WEB_STORE.md).

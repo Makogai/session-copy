@@ -1,0 +1,12 @@
+{
+  "version": "2.0.0",
+  "date": "2026-05-14",
+  "title": "Offline-first sessions",
+  "changes": [
+    "Removed Firebase: sessions are encrypted locally only (clipboard token or .session file).",
+    "Gzip + AES-GCM pack format (sc:v2:) with automatic file export when the clipboard token would be too large.",
+    "Restores HttpOnly and host cookies via chrome.cookies.set in the service worker.",
+    "Login-focused filters trim analytics/cache keys from storage and noisy cookies (optional stricter cookie mode).",
+    "New popup UI and import/export for encrypted session files."
+  ]
+}

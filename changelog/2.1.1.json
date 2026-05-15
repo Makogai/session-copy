@@ -1,0 +1,10 @@
+{
+  "version": "2.1.1",
+  "date": "2026-05-15",
+  "title": "Home, Settings & Info",
+  "changes": [
+    "Bottom navigation with Home, Settings, and Info panels.",
+    "Settings panel for capture options and incognito tip.",
+    "Info panel with version, release notes, and links to website, GitHub, and privacy policy."
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "version": "2.1.0",
+  "date": "2026-05-15",
+  "title": "Branded UI refresh",
+  "changes": [
+    "New Session Copy visual design with brand colors, logo, and polished layout.",
+    "Removed verbose in-popup warning block; replaced with a single discreet footnote.",
+    "Popup code split into focused modules (actions, UI, preferences, changelog).",
+    "Custom toggle switches and clearer status feedback for copy, paste, export, and import."
+  ]
+}

@@ -15,15 +15,24 @@ export async function decrypt(keyBytes, { iv, cipher }) {
   return new Uint8Array(buf);
 }
 
-// helpers for compact text form
+// helpers for compact text form (chunked: spread breaks on large arrays)
 export const b64 = {
-  enc: bytes =>
-    btoa(String.fromCharCode(...bytes))       // regular base-64
-      .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''),  // URL-safe, no padding
+  enc: bytes => {
+    let binary = '';
+    const chunk = 0x8000;
+    for (let i = 0; i < bytes.length; i += chunk) {
+      const sub = bytes.subarray(i, i + chunk);
+      binary += String.fromCharCode.apply(null, sub);
+    }
+    return btoa(binary)
+      .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, ''); // URL-safe, no padding
+  },
   dec: str => {
     str = str.replace(/-/g, '+').replace(/_/g, '/');
-    const pad = '==='.slice((str.length + 3) % 4);   // restore padding
+    const pad = '==='.slice((str.length + 3) % 4);
     const bin = atob(str + pad);
-    return Uint8Array.from([...bin].map(c => c.charCodeAt(0)));
+    const out = new Uint8Array(bin.length);
+    for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+    return out;
   }
 };
