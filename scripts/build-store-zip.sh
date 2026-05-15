@@ -21,7 +21,7 @@ ZIP="$OUT/session-copy-v${VERSION}.zip"
 echo "Building store package v${VERSION}..."
 
 rm -rf "$STAGE"
-mkdir -p "$OUT"
+mkdir -p "$STAGE"
 
 cp manifest.json "$STAGE/"
 cp -r assets src changelog "$STAGE/"
