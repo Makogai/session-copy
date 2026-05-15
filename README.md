@@ -8,6 +8,14 @@ Offline-first tool to **copy** and **paste** an encrypted snapshot of **localSto
 - **Large sessions** — if the clipboard string would exceed a safe size, the extension saves an **encrypted file** instead.
 - **HttpOnly cookies** — restored with `chrome.cookies.set` from the service worker (not via `document.cookie`).
 
+## Package for Chrome Web Store
+
+```powershell
+.\scripts\package-extension.ps1
+```
+
+Creates `dist/session-copy-v{version}.zip` ready to upload. See [docs/CHROME_WEB_STORE.md](docs/CHROME_WEB_STORE.md).
+
 ## Install (developer mode)
 
 1. Open `chrome://extensions/`.

@@ -1,0 +1,6 @@
+dist/
+*.pem
+*.crx
+debug.json
+.DS_Store
+Thumbs.db

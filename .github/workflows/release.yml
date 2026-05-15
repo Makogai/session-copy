@@ -1,0 +1,106 @@
+# On published GitHub Release: attach Web Store .zip and optional .crx to the release.
+# GitHub also attaches automatic "Source code" archives for the tag.
+
+name: Release assets
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Existing tag to attach assets to (e.g. v2.1.3)"
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Resolve version and tag
+        id: meta
+        run: |
+          VERSION=$(node -p "require('./manifest.json').version")
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          if [ "${{ github.event_name }}" = "release" ]; then
+            echo "tag=${{ github.event.release.tag_name }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build Chrome Web Store ZIP
+        run: |
+          chmod +x scripts/build-store-zip.sh
+          ./scripts/build-store-zip.sh "${{ steps.meta.outputs.version }}"
+          ls -la dist/
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+
+      - name: Pack CRX (signed if secret is set)
+        id: crx
+        env:
+          PEM_B64: ${{ secrets.SESSION_COPY_PEM_BASE64 }}
+        run: |
+          STAGE="dist/staging"
+          VERSION="${{ steps.meta.outputs.version }}"
+          OUT_CRX="dist/session-copy-v${VERSION}.crx"
+          rm -f "$OUT_CRX"
+
+          PACK_ARGS=(--pack-extension="$STAGE")
+          if [ -n "$PEM_B64" ]; then
+            echo "$PEM_B64" | base64 -d > dist/signing-key.pem
+            PACK_ARGS+=(--pack-extension-key=dist/signing-key.pem)
+            echo "packed=signed" >> "$GITHUB_OUTPUT"
+          else
+            echo "::warning::SESSION_COPY_PEM_BASE64 secret not set — skipping CRX (ZIP still uploaded). Add your .pem as a base64 secret to publish .crx builds."
+            echo "packed=skip" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          google-chrome "${PACK_ARGS[@]}"
+
+          # Chrome writes {folder-name}.crx next to the extension directory's parent
+          if [ -f "dist/staging.crx" ]; then
+            mv dist/staging.crx "$OUT_CRX"
+          else
+            echo "::error::CRX file not found after pack"
+            exit 1
+          fi
+          echo "path=$OUT_CRX" >> "$GITHUB_OUTPUT"
+          ls -la dist/
+
+      - name: Upload release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          TAG="${{ steps.meta.outputs.tag }}"
+          VERSION="${{ steps.meta.outputs.version }}"
+          ZIP="dist/session-copy-v${VERSION}.zip"
+
+          gh release upload "$TAG" "$ZIP" --clobber
+
+          if [ "${{ steps.crx.outputs.packed }}" = "signed" ]; then
+            gh release upload "$TAG" "${{ steps.crx.outputs.path }}" --clobber
+          fi
+
+      - name: Summary
+        run: |
+          VERSION="${{ steps.meta.outputs.version }}"
+          echo "## Release assets" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Asset | File |" >> "$GITHUB_STEP_SUMMARY"
+          echo "|-------|------|" >> "$GITHUB_STEP_SUMMARY"
+          echo "| Chrome Web Store | \`session-copy-v${VERSION}.zip\` |" >> "$GITHUB_STEP_SUMMARY"
+          if [ "${{ steps.crx.outputs.packed }}" = "signed" ]; then
+            echo "| Local install (CRX) | \`session-copy-v${VERSION}.crx\` |" >> "$GITHUB_STEP_SUMMARY"
+          else
+            echo "| CRX | skipped (set \`SESSION_COPY_PEM_BASE64\` secret) |" >> "$GITHUB_STEP_SUMMARY"
+          fi
+          echo "| Source | GitHub auto-attached source archives for the tag |" >> "$GITHUB_STEP_SUMMARY"

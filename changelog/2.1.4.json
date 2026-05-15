@@ -1,0 +1,10 @@
+{
+  "version": "2.1.4",
+  "date": "2026-05-15",
+  "title": "Release packaging",
+  "changes": [
+    "Scripts to build a Chrome Web Store ZIP locally.",
+    "GitHub Actions attaches .zip (and optional .crx) to each published release.",
+    "Store packaging docs and .gitignore for build output."
+  ]
+}

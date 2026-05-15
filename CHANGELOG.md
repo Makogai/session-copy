@@ -3,6 +3,13 @@
 All notable changes to **Session Copy** are documented here.  
 Format follows [Keep a Changelog](https://keepachangelog.com/). Version JSON in [`changelog/`](changelog/) powers the in-extension “What’s new” card.
 
+## [2.1.4] — 2026-05-15
+
+### Added
+- `scripts/package-extension.ps1` and `scripts/build-store-zip.sh` for Web Store ZIP builds.
+- GitHub Actions workflow uploads `session-copy-v*.zip` on each published release.
+- Optional `.crx` build when `SESSION_COPY_PEM_BASE64` repository secret is set.
+
 ## [2.1.3] — 2026-05-15
 
 ### Added

@@ -1,7 +1,7 @@
 {
   "name": "Session Copy",
   "description": "Copy and restore encrypted login sessions for any website. Offline, private, and built for secure transfer between browsers.",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "manifest_version": 3,
   "action": {
     "default_title": "Session Copy",
