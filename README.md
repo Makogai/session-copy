@@ -8,19 +8,27 @@ Offline-first tool to **copy** and **paste** an encrypted snapshot of **localSto
 - **Large sessions** — if the clipboard string would exceed a safe size, the extension saves an **encrypted file** instead.
 - **HttpOnly cookies** — restored with `chrome.cookies.set` from the service worker (not via `document.cookie`).
 
-## Package for Chrome Web Store
+## Build & install (developer mode)
 
-```powershell
-.\scripts\package-extension.ps1
+```bash
+npm install
+npm run build
 ```
-
-Creates `dist/session-copy-v{version}.zip` ready to upload. See [docs/CHROME_WEB_STORE.md](docs/CHROME_WEB_STORE.md).
-
-## Install (developer mode)
 
 1. Open `chrome://extensions/`.
 2. Enable **Developer mode**.
-3. **Load unpacked** and select this folder (the one containing `manifest.json`).
+3. **Load unpacked** and select the **`dist/`** folder (built extension, not the repo root).
+
+Watch mode: `npm run dev` (rebuilds on file changes; reload the extension in Chrome after each build).
+
+## Package for Chrome Web Store
+
+```powershell
+npm install
+.\scripts\package-extension.ps1
+```
+
+Creates `release/session-copy-v{version}.zip`. See [docs/CHROME_WEB_STORE.md](docs/CHROME_WEB_STORE.md).
 
 ## Usage
 

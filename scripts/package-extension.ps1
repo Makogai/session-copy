@@ -1,50 +1,43 @@
-# Builds a Chrome Web Store upload ZIP (and optional .crx for local testing).
+# Builds Web Store ZIP (and optional .crx) from npm dist/ output.
 # Usage:
 #   .\scripts\package-extension.ps1
 #   .\scripts\package-extension.ps1 -Crx
-#   .\scripts\package-extension.ps1 -Crx -KeyPath ".\dist\session-copy.pem"
+#   .\scripts\package-extension.ps1 -Crx -KeyPath ".\dist\staging.pem"
 
 param(
   [switch]$Crx,
   [string]$KeyPath = "",
-  [string]$OutDir = "dist"
+  [string]$OutDir = "release"
 )
 
 $ErrorActionPreference = "Stop"
 $repoRoot = (Resolve-Path (Join-Path $PSScriptRoot "..")).Path
 Set-Location $repoRoot
 
-$manifestPath = Join-Path $repoRoot "manifest.json"
-if (-not (Test-Path $manifestPath)) {
-  throw "manifest.json not found in $repoRoot"
+if (-not (Get-Command npm -ErrorAction SilentlyContinue)) {
+  throw "npm not found. Install Node.js 20+ and run: npm install"
 }
 
-$manifest = Get-Content $manifestPath -Raw | ConvertFrom-Json
+if (-not (Test-Path (Join-Path $repoRoot "node_modules"))) {
+  Write-Host "Installing dependencies..." -ForegroundColor Cyan
+  npm install
+}
+
+Write-Host "Building extension (npm run build:release)..." -ForegroundColor Cyan
+npm run build:release
+if ($LASTEXITCODE -ne 0) { throw "npm run build:release failed" }
+
+Write-Host "Creating ZIP (npm run package)..." -ForegroundColor Cyan
+npm run package
+if ($LASTEXITCODE -ne 0) { throw "npm run package failed" }
+
+$manifest = Get-Content (Join-Path $repoRoot "package.json") -Raw | ConvertFrom-Json
 $version = $manifest.version
-$zipName = "session-copy-v$version.zip"
+$distPath = Join-Path $repoRoot "dist"
+$zipPath = Join-Path $repoRoot "$OutDir\session-copy-v$version.zip"
 
-$outPath = Join-Path $repoRoot $OutDir
-$stagePath = Join-Path $outPath "staging"
-$zipPath = Join-Path $outPath $zipName
-
-# Prefer bash script when Git Bash / WSL available (same output as CI)
-$bashScript = Join-Path $repoRoot "scripts\build-store-zip.sh"
-if (Get-Command bash -ErrorAction SilentlyContinue) {
-  & bash $bashScript.Replace('\', '/') $version | Out-Null
-} else {
-  if (Test-Path $stagePath) { Remove-Item $stagePath -Recurse -Force }
-  New-Item -ItemType Directory -Path $stagePath -Force | Out-Null
-  New-Item -ItemType Directory -Path $outPath -Force | Out-Null
-  @("manifest.json", "assets", "src", "changelog") | ForEach-Object {
-    $src = Join-Path $repoRoot $_
-    if (-not (Test-Path $src)) { throw "Required path missing: $_" }
-    Copy-Item $src (Join-Path $stagePath $_) -Recurse -Force
-  }
-  if (Test-Path (Join-Path $repoRoot "LICENSE")) {
-    Copy-Item (Join-Path $repoRoot "LICENSE") (Join-Path $stagePath "LICENSE") -Force
-  }
-  if (Test-Path $zipPath) { Remove-Item $zipPath -Force }
-  Compress-Archive -Path (Join-Path $stagePath "*") -DestinationPath $zipPath -CompressionLevel Optimal
+if (-not (Test-Path $zipPath)) {
+  throw "ZIP not found: $zipPath"
 }
 
 $zipSize = (Get-Item $zipPath).Length
@@ -53,8 +46,8 @@ Write-Host "Chrome Web Store package ready:" -ForegroundColor Green
 Write-Host "  $zipPath"
 Write-Host "  $([math]::Round($zipSize / 1KB, 1)) KB"
 Write-Host ""
-Write-Host "Upload this ZIP at: https://chrome.google.com/webstore/devconsole"
-Write-Host "  (Developer Dashboard -> your item -> Package -> Upload new package)"
+Write-Host "Load unpacked from: $distPath"
+Write-Host "Upload ZIP at: https://chrome.google.com/webstore/devconsole"
 Write-Host ""
 
 if ($Crx) {
@@ -68,32 +61,36 @@ if ($Crx) {
   if (-not $chrome) {
     Write-Warning "Chrome not found. Install Chrome or pack manually with: chrome --pack-extension=..."
   } else {
-    $packArgs = @("--pack-extension=$stagePath")
+    $packArgs = @("--pack-extension=$distPath")
     if ($KeyPath -and (Test-Path $KeyPath)) {
-      $packArgs += "--pack-extension-key=$(Resolve-Path $KeyPath)"
+      $packArgs += "--pack-extension-key=$((Resolve-Path $KeyPath).Path)"
     } elseif ($KeyPath) {
-      Write-Warning "Key file not found: $KeyPath — Chrome will create a new key."
+      Write-Warning "Key file not found: $KeyPath - Chrome will create a new key."
     }
 
-    Write-Host "Packing .crx (local install / testing only)..." -ForegroundColor Cyan
-    & $chrome @packArgs
-
-    $crx = Get-ChildItem $outPath -Filter "*.crx" -ErrorAction SilentlyContinue |
-      Sort-Object LastWriteTime -Descending |
-      Select-Object -First 1
-    $pem = Get-ChildItem $outPath -Filter "*.pem" -ErrorAction SilentlyContinue |
-      Sort-Object LastWriteTime -Descending |
-      Select-Object -First 1
-
-    if ($crx) {
-      Write-Host "  CRX: $($crx.FullName)" -ForegroundColor Green
+    Write-Host "Packing .crx (local testing only)..." -ForegroundColor Cyan
+    Write-Host "  If Chrome opens a dialog, click OK - the script waits until Chrome exits." -ForegroundColor DarkGray
+    $proc = Start-Process -FilePath $chrome -ArgumentList $packArgs -Wait -PassThru
+    if ($proc.ExitCode -ne 0 -and $null -ne $proc.ExitCode) {
+      Write-Warning "Chrome pack exited with code $($proc.ExitCode)"
     }
-    if ($pem) {
-      Write-Host "  KEY: $($pem.FullName) — keep this private; reuse with -KeyPath for future builds"
+
+    $crxFile = Get-ChildItem $repoRoot -Filter "*.crx" -ErrorAction SilentlyContinue |
+      Sort-Object LastWriteTime -Descending |
+      Select-Object -First 1
+    $pemFile = Get-ChildItem $repoRoot -Filter "*.pem" -ErrorAction SilentlyContinue |
+      Sort-Object LastWriteTime -Descending |
+      Select-Object -First 1
+
+    if ($crxFile) {
+      Write-Host "  CRX: $($crxFile.FullName)" -ForegroundColor Green
+    } else {
+      Write-Warning "No .crx found (Chrome pack may have failed)."
+    }
+    if ($pemFile) {
+      Write-Host "  KEY: $($pemFile.FullName) - keep private; reuse with -KeyPath" -ForegroundColor Green
     }
     Write-Host ""
-    Write-Host "Note: Chrome Web Store uploads use the .zip, not .crx."
+    Write-Host "Note: Web Store uploads use the .zip, not .crx."
   }
 }
-
-Write-Host "Staging folder kept at: $stagePath (for inspection)"

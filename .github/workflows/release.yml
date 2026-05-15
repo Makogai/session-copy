@@ -26,7 +26,7 @@ jobs:
       - name: Resolve version and tag
         id: meta
         run: |
-          VERSION=$(node -p "require('./manifest.json').version")
+          VERSION=$(node -p "require('./package.json').version")
           echo "version=$VERSION" >> "$GITHUB_OUTPUT"
           if [ "${{ github.event_name }}" = "release" ]; then
             echo "tag=${{ github.event.release.tag_name }}" >> "$GITHUB_OUTPUT"
@@ -34,11 +34,18 @@ jobs:
             echo "tag=${{ inputs.tag }}" >> "$GITHUB_OUTPUT"
           fi
 
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+
       - name: Build Chrome Web Store ZIP
         run: |
+          npm ci
           chmod +x scripts/build-store-zip.sh
           ./scripts/build-store-zip.sh "${{ steps.meta.outputs.version }}"
-          ls -la dist/
+          ls -la dist/ release/
 
       - name: Setup Chrome
         uses: browser-actions/setup-chrome@v1
@@ -48,12 +55,12 @@ jobs:
         env:
           PEM_B64: ${{ secrets.SESSION_COPY_PEM_BASE64 }}
         run: |
-          STAGE="dist/staging"
+          EXT_DIR="dist"
           VERSION="${{ steps.meta.outputs.version }}"
-          OUT_CRX="dist/session-copy-v${VERSION}.crx"
+          OUT_CRX="release/session-copy-v${VERSION}.crx"
           rm -f "$OUT_CRX"
 
-          PACK_ARGS=(--pack-extension="$STAGE")
+          PACK_ARGS=(--pack-extension="$EXT_DIR")
           if [ -n "$PEM_B64" ]; then
             echo "$PEM_B64" | base64 -d > dist/signing-key.pem
             PACK_ARGS+=(--pack-extension-key=dist/signing-key.pem)
@@ -67,8 +74,8 @@ jobs:
           google-chrome "${PACK_ARGS[@]}"
 
           # Chrome writes {folder-name}.crx next to the extension directory's parent
-          if [ -f "dist/staging.crx" ]; then
-            mv dist/staging.crx "$OUT_CRX"
+          if [ -f "dist.crx" ]; then
+            mv dist.crx "$OUT_CRX"
           else
             echo "::error::CRX file not found after pack"
             exit 1
@@ -82,7 +89,7 @@ jobs:
         run: |
           TAG="${{ steps.meta.outputs.tag }}"
           VERSION="${{ steps.meta.outputs.version }}"
-          ZIP="dist/session-copy-v${VERSION}.zip"
+          ZIP="release/session-copy-v${VERSION}.zip"
 
           gh release upload "$TAG" "$ZIP" --clobber
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Build dist/staging and dist/session-copy-v{version}.zip (Chrome Web Store layout).
+# Build extension (npm) and zip dist/ for Chrome Web Store upload.
 set -euo pipefail
 
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
@@ -7,29 +7,17 @@ cd "$ROOT"
 
 VERSION="${1:-}"
 if [ -z "$VERSION" ]; then
-  if command -v node >/dev/null 2>&1; then
-    VERSION="$(node -p "require('./manifest.json').version")"
-  else
-    VERSION="$(python3 -c "import json; print(json.load(open('manifest.json'))['version'])")"
-  fi
+  VERSION="$(node -p "require('./package.json').version")"
 fi
 
-OUT="$ROOT/dist"
-STAGE="$OUT/staging"
-ZIP="$OUT/session-copy-v${VERSION}.zip"
+echo "Building session-copy v${VERSION}..."
+npm run package
 
-echo "Building store package v${VERSION}..."
-
-rm -rf "$STAGE"
-mkdir -p "$STAGE"
-
-cp manifest.json "$STAGE/"
-cp -r assets src changelog "$STAGE/"
-[ -f LICENSE ] && cp LICENSE "$STAGE/"
-
-rm -f "$ZIP"
-(cd "$STAGE" && zip -qr "$ZIP" . -x "*.DS_Store")
+ZIP="$ROOT/release/session-copy-v${VERSION}.zip"
+if [ ! -f "$ZIP" ]; then
+  echo "error: expected $ZIP" >&2
+  exit 1
+fi
 
 echo "ZIP=$ZIP"
-echo "STAGE=$STAGE"
 echo "VERSION=$VERSION"

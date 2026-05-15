@@ -2,7 +2,7 @@
 
 ## Create a release (notes + ZIP + optional CRX)
 
-1. Bump `version` in `manifest.json` and add `changelog/X.Y.Z.json` + `releases/vX.Y.Z.md`.
+1. Bump `version` in `package.json` (and add `changelog/X.Y.Z.json` + `releases/vX.Y.Z.md`).
 2. Commit and push to `main`.
 3. Create and publish the release:
 

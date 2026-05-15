@@ -1,0 +1,26 @@
+{
+  "name": "session-copy",
+  "version": "2.1.4",
+  "description": "Copy and restore encrypted login sessions for any website",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "clean": "node scripts/clean.mjs dist release",
+    "build": "node scripts/build.mjs",
+    "build:release": "cross-env RELEASE=1 node scripts/build.mjs",
+    "dev": "node scripts/build.mjs --watch",
+    "prebuild": "node scripts/clean.mjs dist",
+    "package": "node scripts/package.mjs",
+    "prepackage": "npm run build:release",
+    "release": "npm run package"
+  },
+  "devDependencies": {
+    "archiver": "^7.0.1",
+    "cross-env": "^7.0.3",
+    "esbuild": "^0.25.0",
+    "fs-extra": "^11.3.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

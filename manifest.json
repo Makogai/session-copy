@@ -1,11 +1,11 @@
 {
   "name": "Session Copy",
   "description": "Copy and restore encrypted login sessions for any website. Offline, private, and built for secure transfer between browsers.",
-  "version": "2.1.4",
+  "version": "0.0.0",
   "manifest_version": 3,
   "action": {
     "default_title": "Session Copy",
-    "default_popup": "src/popup/popup.html",
+    "default_popup": "popup/popup.html",
     "default_icon": {
       "16": "assets/icons/icon16.png",
       "32": "assets/icons/icon32.png",
@@ -22,12 +22,12 @@
   "content_scripts": [
     {
       "run_at": "document_start",
-      "js": ["src/content/before.js"],
+      "js": ["content/before.js"],
       "matches": ["https://*/*", "http://*/*"]
     },
     {
       "run_at": "document_idle",
-      "js": ["src/content/after.js"],
+      "js": ["content/after.js"],
       "matches": ["https://*/*", "http://*/*"]
     }
   ],
@@ -41,7 +41,6 @@
   ],
   "host_permissions": ["https://*/*", "http://*/*"],
   "background": {
-    "service_worker": "src/background.js",
-    "type": "module"
+    "service_worker": "background.js"
   }
 }

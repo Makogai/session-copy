@@ -45,10 +45,11 @@ The Web Store expects a **ZIP** with `manifest.json` at the **root** (not a `.cr
 From the repo root in PowerShell:
 
 ```powershell
+npm install
 .\scripts\package-extension.ps1
 ```
 
-Output: `dist/session-copy-v{version}.zip` (version from `manifest.json`).
+Runs `npm run build:release` then zips `dist/` to `release/session-copy-v{version}.zip` (version from `package.json`).
 
 ### Optional: `.crx` for local testing
 
@@ -67,19 +68,19 @@ Uses Chrome’s packer. First run creates a `.pem` key in `dist/` — **keep it 
 ### macOS / Linux
 
 ```bash
+npm install
 chmod +x scripts/package-extension.sh
 ./scripts/package-extension.sh
 ```
 
-### What gets included
+### What gets included (built `dist/`)
 
 | Included | Excluded (dev / site only) |
 |----------|----------------------------|
-| `manifest.json` | `docs/`, `releases/`, `README.md` |
-| `src/` | `debug.json`, `scripts/`, `.git` |
-| `assets/` | `libs/` (unused) |
-| `changelog/` | `CHANGELOG.md` (repo only) |
-| `LICENSE`  | |
+| `manifest.json`, bundled JS | `src/` (source), `node_modules/` |
+| `assets/`, `changelog/` | `docs/`, `releases/`, `README.md` |
+| `popup/` (HTML/CSS + bundle) | `scripts/`, `.git` |
+| `LICENSE` (if present) | Source maps omitted in release builds |
 
 ### Upload
 
