@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="Session Copy privacy policy — no cloud vault, no analytics, encrypted on your device." />
+  <title>Privacy policy — Session Copy</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <a class="brand" href="./">
+        <img src="https://raw.githubusercontent.com/Makogai/session-copy/main/assets/images/logo512.png" width="36" height="36" alt="" />
+        Session Copy
+      </a>
+      <nav class="nav" aria-label="Site">
+        <a href="index.html#features">Features</a>
+        <a href="privacy.html">Privacy</a>
+        <a href="index.html#releases">Releases</a>
+        <a href="index.html#install">Install</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 32px 0 48px;">
+    <a class="page-back" href="index.html">← Back to home</a>
+
+    <article class="legal-doc">
+      <h1>Privacy policy</h1>
+      <p class="meta">Last updated: 2026-05-14</p>
+
+      <h2>What this extension does</h2>
+      <p>
+        Session Copy reads <strong>localStorage</strong>, <strong>sessionStorage</strong>, and
+        <strong>cookies</strong> for the active tab’s origin, applies optional filters to reduce
+        non-essential data, then <strong>encrypts</strong> that bundle on your device. You can place
+        the result on the clipboard or save an encrypted file. Another user with the extension can
+        import it to open the same site and apply the same data.
+      </p>
+
+      <h2>Data we do not collect</h2>
+      <ul>
+        <li><strong>No accounts</strong>, <strong>no analytics</strong>, and <strong>no cloud session database</strong> operated by this project.</li>
+        <li>Encrypted payloads are <strong>only</strong> where you put them (clipboard, file, or whatever channel you use). The extension does not send session contents to our servers.</li>
+      </ul>
+
+      <h2>Permissions (Chrome)</h2>
+      <table>
+        <thead>
+          <tr><th>Permission</th><th>Why it is needed</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>tabs</code></td><td>Read the active tab and open the target origin when pasting.</td></tr>
+          <tr><td><code>scripting</code></td><td>Read storage from the page and write storage after restore.</td></tr>
+          <tr><td><code>cookies</code></td><td>Read cookies for the tab’s URL (including HttpOnly) and set them on restore.</td></tr>
+          <tr><td><code>clipboardRead</code> / <code>clipboardWrite</code></td><td>Read/write the encrypted token when you use copy/paste.</td></tr>
+          <tr><td><code>storage</code></td><td>Remember optional settings (e.g. stricter cookie filter).</td></tr>
+          <tr><td><code>host_permissions</code></td><td>Match web pages where you copy or restore sessions.</td></tr>
+        </tbody>
+      </table>
+
+      <h2>Security expectations</h2>
+      <ul>
+        <li>The encrypted token or file is a <strong>bearer credential</strong>. Anyone who has it can use that session until it expires or is revoked.</li>
+        <li>Some sites use extra protections (device binding, IP checks, IndexedDB-only state). Restores may be partial.</li>
+      </ul>
+
+      <h2>Older versions (Firebase)</h2>
+      <p>
+        If you used a build before 2.0.0 that stored ciphertext in Firebase, that was a separate flow.
+        Rotate or disable any Firebase API keys from old builds and manage historical data per your own policy.
+      </p>
+
+      <h2>Contact</h2>
+      <p>
+        Questions or reports:
+        <a href="https://github.com/Makogai/session-copy/issues">open an issue on GitHub</a>.
+      </p>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <nav class="links" aria-label="Footer">
+        <a href="index.html">Home</a>
+        <a href="https://github.com/Makogai/session-copy/releases">Releases</a>
+        <a href="privacy.html">Privacy</a>
+      </nav>
+      <p>Session Copy · Encrypted session transfer for Chrome</p>
+    </div>
+  </footer>
+</body>
+</html>

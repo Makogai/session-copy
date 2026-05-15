@@ -317,6 +317,130 @@ section {
   font-weight: 600;
 }
 
+.resource-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+.resource-card {
+  display: grid;
+  grid-template-columns: 40px 1fr auto;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  color: inherit;
+  transition:
+    background var(--dur) var(--ease),
+    border-color var(--dur) var(--ease),
+    box-shadow var(--dur) var(--ease);
+}
+
+.resource-card:hover {
+  background: var(--color-surface-soft);
+  border-color: var(--color-blue-pale);
+  box-shadow: var(--shadow-soft);
+}
+
+.resource-card-icon {
+  font-size: 1.25rem;
+  line-height: 1;
+  text-align: center;
+}
+
+.resource-card-title {
+  display: block;
+  font-size: 0.95rem;
+  font-weight: 650;
+  color: var(--color-primary);
+}
+
+.resource-card-desc {
+  display: block;
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  margin-top: 2px;
+}
+
+.resource-card-arrow {
+  font-size: 1.1rem;
+  color: var(--color-accent);
+  font-weight: 600;
+}
+
+/* Privacy page */
+.page-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 20px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.legal-doc {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-soft);
+  border-radius: var(--radius-lg);
+  padding: 24px 22px;
+  box-shadow: var(--shadow-soft);
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.legal-doc h1 {
+  margin: 0 0 8px;
+  font-size: 1.5rem;
+}
+
+.legal-doc .meta {
+  margin: 0 0 20px;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.legal-doc h2 {
+  margin: 24px 0 8px;
+  font-size: 1.05rem;
+}
+
+.legal-doc p,
+.legal-doc li {
+  font-size: 0.92rem;
+  color: var(--color-text-muted);
+  line-height: 1.55;
+}
+
+.legal-doc ul {
+  margin: 8px 0;
+  padding-left: 20px;
+}
+
+.legal-doc table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.85rem;
+  margin: 12px 0;
+}
+
+.legal-doc th,
+.legal-doc td {
+  border: 1px solid var(--color-border-soft);
+  padding: 8px 10px;
+  text-align: left;
+}
+
+.legal-doc th {
+  background: var(--color-surface-soft);
+  color: var(--color-navy);
+}
+
 .coming-soon {
   display: inline-block;
   margin-left: 8px;

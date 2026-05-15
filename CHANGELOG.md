@@ -3,6 +3,15 @@
 All notable changes to **Session Copy** are documented here.  
 Format follows [Keep a Changelog](https://keepachangelog.com/). Version JSON in [`changelog/`](changelog/) powers the in-extension “What’s new” card.
 
+## [2.1.3] — 2026-05-15
+
+### Added
+- GitHub Pages: [Privacy](https://makogai.github.io/session-copy/privacy.html) page and **Releases** section on the site.
+- Updated extension toolbar icons and logo assets.
+
+### Changed
+- Extension Info → Privacy link points to the hosted policy page.
+
 ## [2.1.2] — 2026-05-15
 
 ### Changed
