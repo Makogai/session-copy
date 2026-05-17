@@ -3,24 +3,40 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="description" content="Session Copy — copy and restore encrypted browser sessions for any website. Offline, private, built for Chrome." />
+  <meta name="description" content="Session Copy — copy and restore encrypted browser sessions for any website. Offline, private, light and dark themes, site cleanup." />
   <title>Session Copy — Secure session transfer for Chrome</title>
+  <script src="theme-boot.js"></script>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header class="site-header">
     <div class="container">
-      <a class="brand" href="./">
-        <img src="https://raw.githubusercontent.com/Makogai/session-copy/main/assets/images/logo512.png" width="36" height="36" alt="" />
-        Session Copy
-      </a>
-      <nav class="nav" aria-label="Site">
-        <a href="#features">Features</a>
-        <a href="#how">How it works</a>
-        <a href="privacy.html">Privacy</a>
-        <a href="#releases">Releases</a>
-        <a href="#install">Install</a>
-      </nav>
+      <div class="brand-block">
+        <a class="brand" href="./">
+          <img src="https://raw.githubusercontent.com/Makogai/session-copy/main/assets/images/logo512.png" width="36" height="36" alt="" />
+          <span class="brand-name">Session Copy</span>
+        </a>
+        <a
+          class="version-flag"
+          data-version-badge
+          href="https://github.com/Makogai/session-copy/releases/tag/v2.3.0"
+          data-version-fallback="2.3.0"
+        >v2.3.0</a>
+      </div>
+      <div class="header-actions">
+        <nav class="nav" aria-label="Site">
+          <a href="#features">Features</a>
+          <a href="#extension">Extension</a>
+          <a href="#how">How it works</a>
+          <a href="privacy.html">Privacy</a>
+          <a href="#install">Install</a>
+        </nav>
+        <div class="theme-toggle" role="radiogroup" aria-label="Site theme">
+          <button type="button" class="theme-toggle-btn" data-theme-btn="system" aria-checked="true">Auto</button>
+          <button type="button" class="theme-toggle-btn" data-theme-btn="light">Light</button>
+          <button type="button" class="theme-toggle-btn" data-theme-btn="dark">Dark</button>
+        </div>
+      </div>
     </div>
   </header>
 
@@ -53,48 +69,87 @@
     <section id="features">
       <div class="container">
         <h2 class="section-title">Built for real workflows</h2>
-        <p class="section-sub">Share logins with your team, test in incognito, or move sessions between machines — without storing secrets on a server.</p>
+        <p class="section-sub">Share logins between machines, test in incognito, or recover from a bad restore — without a server holding your secrets.</p>
         <div class="features">
           <article class="feature-card">
             <div class="feature-icon" aria-hidden="true">🔒</div>
             <h3>Encrypted & offline</h3>
-            <p>Sessions are compressed and encrypted locally. Clipboard or file — you choose how to share.</p>
+            <p>Sessions are compressed and encrypted on your device. Share via clipboard token or an encrypted <code>.session</code> file.</p>
           </article>
           <article class="feature-card">
             <div class="feature-icon" aria-hidden="true">🌐</div>
             <h3>Works on any site</h3>
-            <p>Captures storage and cookies (including HttpOnly) with smart login-only mode to keep payloads small.</p>
+            <p>Captures <code>localStorage</code>, <code>sessionStorage</code>, and cookies — including <strong>HttpOnly</strong> — for the active tab.</p>
           </article>
           <article class="feature-card">
             <div class="feature-icon" aria-hidden="true">⚡</div>
             <h3>Login transfer mode</h3>
-            <p>Default mode copies only auth-related data — faster, smaller, and better for sites like ChatGPT.</p>
+            <p>Default setting copies only auth-related keys and cookies — smaller payloads, fewer surprises.</p>
           </article>
           <article class="feature-card">
             <div class="feature-icon" aria-hidden="true">📁</div>
-            <h3>File export</h3>
-            <p>Large sessions? Save an encrypted <code>.session</code> file instead of a huge clipboard string.</p>
+            <h3>Export & import</h3>
+            <p>Large session? Download an encrypted file instead of a huge clipboard string.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🧹</div>
+            <h3>Clear site data</h3>
+            <p>Paste went wrong? Reset cookies and storage for the active site from the dedicated <strong>Clear</strong> tab.</p>
+          </article>
+          <article class="feature-card">
+            <div class="feature-icon" aria-hidden="true">🌓</div>
+            <h3>Light & dark themes</h3>
+            <p>Matches your system appearance by default. Override with System, Light, or Dark in Settings.</p>
           </article>
         </div>
       </div>
     </section>
 
-    <section id="how" style="padding-top: 0;">
+    <section id="extension" style="padding-top: 0;">
+      <div class="container">
+        <div class="extension-panel">
+          <h2>Inside the extension</h2>
+          <p class="section-sub">Four tabs in the popup — same brand blues and teals as this site.</p>
+          <div class="tab-pills" aria-hidden="true">
+            <span class="tab-pill">Home</span>
+            <span class="tab-pill">Clear</span>
+            <span class="tab-pill">Settings</span>
+            <span class="tab-pill">Info</span>
+          </div>
+          <ul class="extension-list">
+            <li><strong>Home</strong> — Copy session, paste session, export/import files, shortcut to site cleanup.</li>
+            <li><strong>Clear</strong> — Remove cookies and storage for the active tab; confirm before wiping.</li>
+            <li><strong>Settings</strong> — Login transfer mode, stricter cookie filter, theme, link to cleanup.</li>
+            <li><strong>Info</strong> — Version, Chrome Web Store & GitHub links, latest release highlights.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section id="how">
       <div class="container">
         <h2 class="section-title">How it works</h2>
-        <p class="section-sub">Three steps. No account signup.</p>
+        <p class="section-sub">No account signup. Treat shared sessions like passwords.</p>
         <div class="steps">
           <article class="step">
-            <h3>Copy</h3>
-            <p>Log in on a site, open Session Copy, and copy the encrypted session from the active tab.</p>
+            <h3>Log in & copy</h3>
+            <p>On a site you care about, open Session Copy and copy the encrypted session (or export a file).</p>
           </article>
           <article class="step">
-            <h3>Share</h3>
-            <p>Send the token or file through your usual channel — treat it like a password.</p>
+            <h3>Share securely</h3>
+            <p>Send the token or <code>.session</code> file through your usual channel.</p>
           </article>
           <article class="step">
-            <h3>Paste</h3>
-            <p>On another browser, paste or import. The extension opens the site and restores your session.</p>
+            <h3>Paste or import</h3>
+            <p>On another browser, paste or import. The extension opens the site and restores storage + cookies.</p>
+          </article>
+          <article class="step">
+            <h3>Reload if needed</h3>
+            <p>Some sites need one refresh after restore. Login transfer mode keeps payloads focused on auth.</p>
+          </article>
+          <article class="step">
+            <h3>Clear if stuck</h3>
+            <p>If a restore left the site broken, use <strong>Clear</strong> to reset that origin and start fresh.</p>
           </article>
         </div>
       </div>
@@ -110,7 +165,7 @@
     <section id="releases">
       <div class="container">
         <h2 class="section-title">Releases</h2>
-        <p class="section-sub">Version history, release notes, and downloadable tags on GitHub.</p>
+        <p class="section-sub">Version history and downloadable packages on GitHub.</p>
         <div class="resource-cards">
           <a class="resource-card" href="https://chromewebstore.google.com/detail/session-copy/cdmghcjmilmfknopnilocihmcpabblkp" target="_blank" rel="noopener noreferrer">
             <span class="resource-card-icon" aria-hidden="true">🧩</span>
@@ -162,9 +217,10 @@
             Build from source
           </a>
         </div>
-        <p style="max-width: 520px; margin: 0 auto; font-size: 0.9rem; color: var(--color-text-muted);">
-          Developers: clone the repo, run <code>npm run build</code>, then load the <code>dist/</code> folder at
-          <code>chrome://extensions</code> with Developer mode enabled.
+        <p style="max-width: 560px; margin: 0 auto; font-size: 0.9rem; color: var(--color-text-muted);">
+          Developers: <code>npm install</code>, <code>npm run build</code>, then load the <code>dist/</code> folder at
+          <code>chrome://extensions</code> with Developer mode. The popup uses Vue 3 + TypeScript; run
+          <code>npm run typecheck</code> before contributing.
         </p>
       </div>
     </section>
@@ -182,5 +238,6 @@
       <p>Session Copy · Encrypted session transfer for Chrome</p>
     </div>
   </footer>
+  <script src="site.js" defer></script>
 </body>
 </html>

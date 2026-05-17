@@ -3,6 +3,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { createRequire } from 'module';
+import vue from 'unplugin-vue/esbuild';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, '..');
@@ -24,16 +25,28 @@ const esbuildCommon = {
   define: { 'process.env.NODE_ENV': '"production"' }
 };
 
+async function syncDocsVersion() {
+  const versionPath = path.join(rootDir, 'docs', 'version.json');
+  await fs.writeJson(versionPath, { version: pkg.version }, { spaces: 2 });
+  console.log(`docs/version.json -> ${pkg.version}`);
+}
+
+async function writeDistManifest() {
+  const pkgJson = await fs.readJson(path.join(rootDir, 'package.json'));
+  const manifest = await fs.readJson(path.join(rootDir, 'manifest.json'));
+  manifest.version = pkgJson.version;
+  await fs.writeJson(path.join(outDir, 'manifest.json'), manifest, { spaces: 2 });
+  console.log(`Manifest version -> ${pkgJson.version}${isRelease ? ' (release)' : ''}`);
+  return pkgJson.version;
+}
+
 async function copyStaticFiles() {
   if (!isWatch) {
     await fs.emptyDir(outDir);
   }
   await fs.ensureDir(outDir);
 
-  const manifest = await fs.readJson(path.join(rootDir, 'manifest.json'));
-  manifest.version = pkg.version;
-  await fs.writeJson(path.join(outDir, 'manifest.json'), manifest, { spaces: 2 });
-  console.log(`Manifest version -> ${pkg.version}${isRelease ? ' (release)' : ''}`);
+  await writeDistManifest();
 
   await fs.copy(path.join(rootDir, 'assets'), path.join(outDir, 'assets'));
   await fs.copy(path.join(rootDir, 'changelog'), path.join(outDir, 'changelog'));
@@ -43,9 +56,10 @@ async function copyStaticFiles() {
   await fs.copy(path.join(rootDir, 'src/popup/popup.css'), path.join(popupDir, 'popup.css'));
 
   let popupHtml = await fs.readFile(path.join(rootDir, 'src/popup/popup.html'), 'utf8');
-  popupHtml = popupHtml
-    .replace('src="../../assets/images/logo512.png"', 'src="../assets/images/logo512.png"')
-    .replace('<script type="module" src="popup.js"></script>', '<script src="popup.js"></script>');
+  popupHtml = popupHtml.replace(
+    '<script type="module" src="main.ts"></script>',
+    '<script src="popup.js"></script>'
+  );
   await fs.writeFile(path.join(popupDir, 'popup.html'), popupHtml);
 
   const license = path.join(rootDir, 'LICENSE');
@@ -53,17 +67,19 @@ async function copyStaticFiles() {
     await fs.copy(license, path.join(outDir, 'LICENSE'));
   }
 
+  await syncDocsVersion();
   console.log('Static files copied');
 }
 
 async function buildJs() {
   const config = {
     ...esbuildCommon,
+    plugins: [vue()],
     entryPoints: {
       background: path.join(rootDir, 'src/background.js'),
       'content/before': path.join(rootDir, 'src/content/before.js'),
       'content/after': path.join(rootDir, 'src/content/after.js'),
-      'popup/popup': path.join(rootDir, 'src/popup/popup.js')
+      'popup/popup': path.join(rootDir, 'src/popup/main.ts')
     },
     outdir: outDir
   };
@@ -72,6 +88,17 @@ async function buildJs() {
     const ctx = await esbuild.context(config);
     await ctx.watch();
     console.log('Watching for changes...');
+
+    const pkgPath = path.join(rootDir, 'package.json');
+    let pkgTimer;
+    fs.watch(pkgPath, () => {
+      clearTimeout(pkgTimer);
+      pkgTimer = setTimeout(() => {
+        void writeDistManifest().then((v) => {
+          console.log(`package.json changed — reload the extension in chrome://extensions (v${v})`);
+        });
+      }, 80);
+    });
   } else {
     await esbuild.build(config);
     console.log('JavaScript bundled');

@@ -16,7 +16,11 @@ After a minute or two the site is live at:
 
 ## Links in the extension
 
-[`src/popup/config.js`](../src/popup/config.js) — **Website**, **Chrome Web Store**, GitHub, releases, issues, and privacy URLs for the Info panel.
+[`src/popup/config.ts`](../src/popup/config.ts) — **Website**, **Chrome Web Store**, GitHub, releases, issues, and privacy URLs for the Info panel.
+
+**Version flag:** `docs/version.json` is updated from `package.json` on each `npm run build`. The header shows **vX.Y.Z** next to the logo (links to that GitHub release). `site.js` refreshes it from `version.json` when the site is served over HTTP(S).
+
+**Themes:** `docs/theme-boot.js` (in `<head>`) prevents flash; header **Auto / Light / Dark** toggle stores preference in `localStorage` (`sc-docs-theme`). Palette matches the extension popup.
 
 **Chrome Web Store:** https://chromewebstore.google.com/detail/session-copy/cdmghcjmilmfknopnilocihmcpabblkp
 

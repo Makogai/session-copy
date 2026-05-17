@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "lib": ["ES2022", "DOM"],
+    "types": ["chrome"]
+  },
+  "include": ["src/popup/**/*.ts", "src/popup/**/*.vue", "src/popup/env.d.ts", "src/core/*.d.ts"]
+}

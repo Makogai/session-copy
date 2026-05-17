@@ -1,0 +1,11 @@
+{
+  "version": "2.3.0",
+  "date": "2026-05-17",
+  "title": "Vue UI, themes & refreshed site",
+  "changes": [
+    "Popup rebuilt with Vue 3 and TypeScript — Home, Clear, Settings, and Info tabs.",
+    "Light and dark themes with System / Light / Dark in Settings (matches your OS by default).",
+    "Clear site data tab to reset cookies and storage when a restore goes wrong.",
+    "Project website updated with the same themes, full feature list, and a version badge."
+  ]
+}
