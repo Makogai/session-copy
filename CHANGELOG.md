@@ -3,6 +3,17 @@
 All notable changes to **Session Copy** are documented here.  
 Format follows [Keep a Changelog](https://keepachangelog.com/). Version JSON in [`changelog/`](changelog/) powers the in-extension “What’s new” card.
 
+## [2.3.0] — 2026-05-17
+
+### Added
+- **Light / dark themes** in the popup — defaults to system; override in Settings (System, Light, Dark).
+- **Clear site data** tab (plus shortcuts on Home and Settings) to reset cookies and storage for the active tab.
+
+### Changed
+- Popup rebuilt with **Vue 3** and **TypeScript** (`src/popup/`); esbuild bundles into `dist/popup/`.
+- GitHub Pages site: light/dark themes, expanded features, version badge (`docs/version.json` synced on build).
+- Dev watch mode updates `dist/manifest.json` when `package.json` version changes.
+
 ## [2.2.0] — 2026-05-15
 
 ### Added

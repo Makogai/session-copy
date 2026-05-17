@@ -38,6 +38,7 @@
 - **Login transfer mode** — recommended default; copies auth-related keys and cookies only, not full UI state.
 - **Clipboard or file** — copy/paste a token when it fits; otherwise export/import an encrypted file.
 - **Clear site data** — reset cookies and storage for the active tab if a restore left the site broken.
+- **Light / dark themes** — matches your system by default; switch in Settings.
 - **Offline** — no analytics, no backend, no session database operated by this project.
 
 ## Screenshots
@@ -73,6 +74,7 @@ Some sites store extra state in IndexedDB or device checks; restores may be part
 |--------|-------------|
 | **Login transfer only** (default) | Copies a small allowlist of storage keys and cookies that typically carry auth. |
 | **Stricter cookie filter** | When full sync is enabled, drops more analytics-style cookies. |
+| **Theme** | System (default), Light, or Dark appearance for the popup. |
 
 To paste into **incognito**, allow the extension in incognito: `chrome://extensions` → Session Copy → **Allow in incognito**.
 
@@ -86,11 +88,14 @@ To paste into **incognito**, allow the extension in incognito: `chrome://extensi
 
 Requires **Node.js 20+**.
 
+The **popup** uses **Vue 3** and **TypeScript** under `src/popup/`. The service worker and content scripts remain JavaScript modules in `src/`. `npm run build` writes `docs/version.json` for the GitHub Pages version badge.
+
 ```bash
 git clone https://github.com/Makogai/session-copy.git
 cd session-copy
 npm install
 npm run build
+npm run typecheck   # optional — Vue/TS check for the popup
 ```
 
 Load the extension in Chrome:

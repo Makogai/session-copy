@@ -7,13 +7,13 @@
 3. Create and publish the release:
 
 ```bash
-# 1. Bump version in package.json, add changelog/X.Y.Z.json + releases/vX.Y.Z.md, commit
-git push origin main
+# Open PR (vue → main), merge on GitHub, then tag from main:
+gh pr create --base main --head vue --title "Session Copy v2.3.0 — Vue popup, themes, site cleanup"
 
-# 2. Tag and publish (triggers Release assets workflow → uploads .zip)
-git tag v2.2.0
-git push origin v2.2.0
-gh release create v2.2.0 --title "Session Copy v2.2.0" --notes-file releases/v2.2.0.md
+# After merge on GitHub:
+git checkout main && git pull
+git tag v2.3.0 && git push origin v2.3.0
+gh release create v2.3.0 --title "Session Copy v2.3.0" --notes-file releases/v2.3.0.md
 ```
 
 Publishing triggers **Release assets** — the workflow uploads `session-copy-v*.zip` (and `.crx` if `SESSION_COPY_PEM_BASE64` is configured). GitHub also attaches **Source code** archives automatically.

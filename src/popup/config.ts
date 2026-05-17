@@ -7,6 +7,6 @@ export const APP_LINKS = {
   releases: 'https://github.com/Makogai/session-copy/releases',
   issues: 'https://github.com/Makogai/session-copy/issues',
   privacy: 'https://makogai.github.io/session-copy/privacy.html'
-};
+} as const;
 
 export const APP_TAGLINE = 'Secure session transfer for any website';
