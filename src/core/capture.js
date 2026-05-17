@@ -49,9 +49,10 @@ export async function captureFromTab(tabId, opts = {}) {
   const loginOnlyMode = opts.loginOnlyMode !== false;
   const [{ result: page }] = await chrome.scripting.executeScript({
     target: { tabId },
+    // Must use window.* — esbuild minify renames outer `localStorage` vars and breaks injected func.
     func: () => ({
-      localStorage: Object.fromEntries(Object.entries(localStorage)),
-      sessionStorage: Object.fromEntries(Object.entries(sessionStorage)),
+      localStorage: Object.fromEntries(Object.entries(window.localStorage)),
+      sessionStorage: Object.fromEntries(Object.entries(window.sessionStorage)),
       origin: location.origin,
       host: location.hostname
     })

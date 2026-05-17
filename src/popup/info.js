@@ -26,6 +26,7 @@ export function initInfo() {
   const linksEl = document.getElementById('infoLinks');
   if (linksEl) {
     linksEl.innerHTML = [
+      linkRow({ href: APP_LINKS.chromeWebStore, label: 'Chrome Web Store', icon: ICONS.chrome }),
       linkRow({ href: APP_LINKS.website, label: 'Website', icon: ICONS.globe }),
       linkRow({ href: APP_LINKS.repository, label: 'GitHub', icon: ICONS.github }),
       linkRow({ href: APP_LINKS.releases, label: 'All releases', icon: ICONS.releases }),

@@ -14,9 +14,11 @@ After a minute or two the site is live at:
 
 **https://makogai.github.io/session-copy/**
 
-## Update the extension link
+## Links in the extension
 
-[`src/popup/config.js`](../src/popup/config.js) uses this URL for **Website** in the Info panel.
+[`src/popup/config.js`](../src/popup/config.js) — **Website**, **Chrome Web Store**, GitHub, releases, issues, and privacy URLs for the Info panel.
+
+**Chrome Web Store:** https://chromewebstore.google.com/detail/session-copy/cdmghcjmilmfknopnilocihmcpabblkp
 
 ## Optional: custom domain
 

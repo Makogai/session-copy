@@ -1,6 +1,18 @@
-# Chrome Web Store checklist
+# Chrome Web Store
 
-## Listing
+## Published listing
+
+**Live extension:** [Session Copy on the Chrome Web Store](https://chromewebstore.google.com/detail/session-copy/cdmghcjmilmfknopnilocihmcpabblkp)
+
+| Field | Value |
+|-------|--------|
+| Extension ID | `cdmghcjmilmfknopnilocihmcpabblkp` |
+| Privacy policy | https://makogai.github.io/session-copy/privacy.html |
+| Developer dashboard | https://chrome.google.com/webstore/devconsole |
+
+Link this URL from the [README](../README.md), [project site](https://makogai.github.io/session-copy/), and `src/popup/config.js` (`APP_LINKS.chromeWebStore`).
+
+## Listing checklist
 
 - **Single purpose:** Copy/restore encrypted session data (DOM storage + cookies) for the active site.
 - **Privacy policy URL:** https://makogai.github.io/session-copy/privacy.html

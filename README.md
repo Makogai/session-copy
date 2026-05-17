@@ -9,6 +9,11 @@
 </p>
 
 <p align="center">
+  <a href="https://chromewebstore.google.com/detail/session-copy/cdmghcjmilmfknopnilocihmcpabblkp"><strong>Add to Chrome</strong></a>
+</p>
+
+<p align="center">
+  <a href="https://chromewebstore.google.com/detail/session-copy/cdmghcjmilmfknopnilocihmcpabblkp">Chrome Web Store</a> ·
   <a href="https://makogai.github.io/session-copy/">Website</a> ·
   <a href="https://github.com/Makogai/session-copy/releases">Releases</a> ·
   <a href="https://makogai.github.io/session-copy/privacy.html">Privacy</a> ·
@@ -18,6 +23,12 @@
 ---
 
 **Session Copy** is a Chrome extension that copies and restores an **encrypted** snapshot of **localStorage**, **sessionStorage**, and **cookies** for the site you are on—so you can move a login session to another browser or machine. Everything is processed **on your device**; there is no cloud vault or account.
+
+## Install
+
+**Users:** install from the [Chrome Web Store](https://chromewebstore.google.com/detail/session-copy/cdmghcjmilmfknopnilocihmcpabblkp).
+
+**Developers:** build from source and load the `dist/` folder — see [Development](#development) below.
 
 ## Features
 
@@ -90,7 +101,7 @@ Load the extension in Chrome:
 |---------|-------------|
 | `npm run build` | Build into `dist/` |
 | `npm run dev` | Watch mode (reload extension after rebuilds) |
-| `npm run package` | Release build + `release/session-copy-v*.zip` for the Web Store |
+| `npm run package` | Release build + `release/session-copy-v*.zip` for store updates |
 
 Windows packaging shortcut:
 
@@ -98,7 +109,7 @@ Windows packaging shortcut:
 .\scripts\package-extension.ps1
 ```
 
-See [docs/CHROME_WEB_STORE.md](docs/CHROME_WEB_STORE.md) for store upload and [docs/GITHUB_PAGES.md](docs/GITHUB_PAGES.md) for the project site.
+See [docs/CHROME_WEB_STORE.md](docs/CHROME_WEB_STORE.md) for publishing updates and [docs/GITHUB_PAGES.md](docs/GITHUB_PAGES.md) for the project site.
 
 ## Privacy
 
