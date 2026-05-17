@@ -20,7 +20,7 @@ Link this URL from the [README](../README.md), [project site](https://makogai.gi
 
 ## Automated release assets (GitHub Actions)
 
-When you **publish a GitHub Release** (e.g. `gh release create v2.1.4 --notes-file releases/v2.1.4.md`), the [Release assets workflow](../.github/workflows/release.yml) attaches:
+When you **publish a GitHub Release** (e.g. `gh release create v2.2.0 --notes-file releases/v2.2.0.md`), the [Release assets workflow](../.github/workflows/release.yml) attaches:
 
 | Asset | Description |
 |-------|-------------|
@@ -46,7 +46,7 @@ Without this secret, releases still get the **`.zip`**; `.crx` is skipped.
 
 ### Manual re-run
 
-**Actions** → **Release assets** → **Run workflow** → enter tag (e.g. `v2.1.3`).
+**Actions** → **Release assets** → **Run workflow** → enter tag (e.g. `v2.2.0`).
 
 ## Package for upload (ZIP)
 
@@ -98,7 +98,7 @@ chmod +x scripts/package-extension.sh
 
 1. Open [Chrome Developer Dashboard](https://chrome.google.com/webstore/devconsole)
 2. Create or select your item
-3. **Package** → **Upload new package** → choose `dist/session-copy-v*.zip`
+3. **Package** → **Upload new package** → choose `release/session-copy-v*.zip` (or download the `.zip` from the GitHub Release)
 4. Complete listing, privacy URL, and permission justifications
 
 ## Security hygiene

@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       tag:
-        description: "Existing tag to attach assets to (e.g. v2.1.3)"
+        description: "Existing tag to attach assets to (e.g. v2.2.0)"
         required: true
         type: string
 
@@ -43,8 +43,7 @@ jobs:
       - name: Build Chrome Web Store ZIP
         run: |
           npm ci
-          chmod +x scripts/build-store-zip.sh
-          ./scripts/build-store-zip.sh "${{ steps.meta.outputs.version }}"
+          npm run package
           ls -la dist/ release/
 
       - name: Setup Chrome

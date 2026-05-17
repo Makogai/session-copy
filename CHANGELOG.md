@@ -3,6 +3,19 @@
 All notable changes to **Session Copy** are documented here.  
 Format follows [Keep a Changelog](https://keepachangelog.com/). Version JSON in [`changelog/`](changelog/) powers the in-extension “What’s new” card.
 
+## [2.2.0] — 2026-05-15
+
+### Added
+- **Clear site data** — reset cookies and storage for the active tab; dedicated Clear tab plus Home/Settings shortcuts.
+- **npm + esbuild** build pipeline (`src/` → `dist/`); `npm run package` produces `release/session-copy-v*.zip`.
+
+### Fixed
+- Session copy after release bundling (injected script uses `window.localStorage` / `window.sessionStorage`).
+- Bottom navigation layout with four tabs.
+
+### Changed
+- GitHub Actions release workflow uses `npm run package` instead of legacy shell-only packaging.
+
 ## [2.1.4] — 2026-05-15
 
 ### Added

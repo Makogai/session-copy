@@ -37,6 +37,7 @@
 - **HttpOnly cookies** — restored with `chrome.cookies.set` from the service worker, not `document.cookie`.
 - **Login transfer mode** — recommended default; copies auth-related keys and cookies only, not full UI state.
 - **Clipboard or file** — copy/paste a token when it fits; otherwise export/import an encrypted file.
+- **Clear site data** — reset cookies and storage for the active tab if a restore left the site broken.
 - **Offline** — no analytics, no backend, no session database operated by this project.
 
 ## Screenshots
@@ -62,6 +63,7 @@
 2. Open Session Copy → **Copy session** (or **Export** to save a file).
 3. On another browser or machine → **Paste session** or **Import** the file.
 4. If the site still looks logged out, **reload** the page once.
+5. If a restore made things worse, open **Clear** (or **Site cleanup** on Home/Settings) to reset that site’s cookies and storage.
 
 Some sites store extra state in IndexedDB or device checks; restores may be partial. See [limits](#limits) below.
 
@@ -101,7 +103,9 @@ Load the extension in Chrome:
 |---------|-------------|
 | `npm run build` | Build into `dist/` |
 | `npm run dev` | Watch mode (reload extension after rebuilds) |
-| `npm run package` | Release build + `release/session-copy-v*.zip` for store updates |
+| `npm run package` | Release build + `release/session-copy-v*.zip` for [Chrome Web Store](docs/CHROME_WEB_STORE.md) uploads |
+
+Source lives in `src/`; only **`dist/`** is loaded as the extension. The repo root `manifest.json` is a template (version is taken from `package.json` at build time).
 
 Windows packaging shortcut:
 

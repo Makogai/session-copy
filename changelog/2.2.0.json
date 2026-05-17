@@ -1,0 +1,11 @@
+{
+  "version": "2.2.0",
+  "date": "2026-05-15",
+  "title": "Site cleanup & build pipeline",
+  "changes": [
+    "Clear site data: reset cookies and storage for the active tab when a restore goes wrong.",
+    "Dedicated Clear tab plus shortcuts from Home and Settings.",
+    "Extension built with npm and esbuild — load the dist/ folder for development.",
+    "Fix session copy after release bundling; improved four-tab bottom navigation."
+  ]
+}

@@ -63,12 +63,93 @@
         </div>
         <input type="file" id="fileInput" accept=".session,application/octet-stream,*/*" />
 
+        <p class="section-label section-label--spaced">Site cleanup</p>
+        <button type="button" class="settings-jump" data-goto-view="cleanup">
+          <span class="settings-jump-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M10 11v6M14 11v6M6 7l1 14h10l1-14" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="settings-jump-text">
+            <span class="settings-jump-label">Clear site data</span>
+            <span class="settings-jump-hint">Reset cookies &amp; storage on the active tab</span>
+          </span>
+          <svg class="settings-jump-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+
         <div id="status" class="status" role="status" aria-live="polite">
           <span class="status-dot" aria-hidden="true"></span>
           <span class="status-text" id="statusText"></span>
         </div>
 
         <p class="home-hint">Encrypted on your device. Treat shared sessions like passwords.</p>
+      </div>
+
+      <!-- Clear site data -->
+      <div class="view" data-view="cleanup" hidden>
+        <p class="panel-title">Clear site data</p>
+        <p class="panel-lead">Remove cookies and storage for the active tab’s site. Use this if a paste or restore left things broken.</p>
+
+        <section class="cleanup-card" aria-label="Clear site data">
+          <div class="site-pill" id="cleanupSitePill">
+            <div class="site-pill-icon-wrap" id="cleanupSiteIcon" aria-hidden="true"></div>
+            <span class="site-pill-text">
+              <span class="site-pill-label">Active site</span>
+              <span class="site-pill-host" id="cleanupSiteHost">—</span>
+            </span>
+          </div>
+          <p class="cleanup-hint" id="cleanupSiteHint">Open a website tab to enable cleanup.</p>
+
+          <div class="cleanup-options" id="cleanupOptions" hidden>
+            <label class="cleanup-check">
+              <input type="checkbox" id="cleanupCookies" checked />
+              <span class="cleanup-check-box" aria-hidden="true"></span>
+              <span class="cleanup-check-text">
+                <span class="cleanup-check-label">Cookies</span>
+                <span class="cleanup-check-hint">Includes HttpOnly — signs you out</span>
+              </span>
+            </label>
+            <label class="cleanup-check">
+              <input type="checkbox" id="cleanupLocal" checked />
+              <span class="cleanup-check-box" aria-hidden="true"></span>
+              <span class="cleanup-check-text">
+                <span class="cleanup-check-label">Local storage</span>
+                <span class="cleanup-check-hint">Persistent site data</span>
+              </span>
+            </label>
+            <label class="cleanup-check">
+              <input type="checkbox" id="cleanupSession" checked />
+              <span class="cleanup-check-box" aria-hidden="true"></span>
+              <span class="cleanup-check-text">
+                <span class="cleanup-check-label">Session storage</span>
+                <span class="cleanup-check-hint">Tab-scoped data</span>
+              </span>
+            </label>
+          </div>
+
+          <div class="cleanup-actions" id="cleanupActions" hidden>
+            <button type="button" class="btn btn-danger-soft" id="cleanupStart">
+              <svg class="icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+                <path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M10 11v6M14 11v6M6 7l1 14h10l1-14" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Clear site data
+            </button>
+          </div>
+
+          <div class="cleanup-confirm" id="cleanupConfirm" hidden>
+            <p class="cleanup-warning">
+              This signs you out and removes site data for <strong id="cleanupConfirmHost">this site</strong>. It cannot be undone.
+            </p>
+            <div class="cleanup-confirm-row">
+              <button type="button" class="btn btn-ghost btn-ghost--compact" id="cleanupCancel">Cancel</button>
+              <button type="button" class="btn btn-danger" id="cleanupConfirmBtn">Yes, clear</button>
+            </div>
+          </div>
+
+          <div class="cleanup-status" id="cleanupStatus" role="status" aria-live="polite" hidden></div>
+        </section>
       </div>
 
       <!-- Settings -->
@@ -94,6 +175,22 @@
             </span>
           </label>
         </section>
+
+        <p class="section-label section-label--spaced">Site cleanup</p>
+        <button type="button" class="settings-jump" data-goto-view="cleanup">
+          <span class="settings-jump-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none">
+              <path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M10 11v6M14 11v6M6 7l1 14h10l1-14" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+          </span>
+          <span class="settings-jump-text">
+            <span class="settings-jump-label">Clear site data</span>
+            <span class="settings-jump-hint">Reset cookies &amp; storage on the active tab</span>
+          </span>
+          <svg class="settings-jump-chevron" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
 
         <div class="info-callout">
           <strong>Tip</strong>
@@ -127,6 +224,12 @@
           <path d="M4 10.5L12 4l8 6.5V19a1.5 1.5 0 0 1-1.5 1.5H5.5A1.5 1.5 0 0 1 4 19v-8.5z" stroke="currentColor" stroke-width="1.75" stroke-linejoin="round"/>
         </svg>
         Home
+      </button>
+      <button type="button" class="nav-btn" data-nav="cleanup">
+        <svg class="nav-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <path d="M4 7h16M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2M10 11v6M14 11v6M6 7l1 14h10l1-14" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Clear
       </button>
       <button type="button" class="nav-btn" data-nav="settings">
         <svg class="nav-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">

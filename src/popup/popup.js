@@ -2,6 +2,7 @@ import { initPreferences } from './preferences.js';
 import { initNavigation } from './navigation.js';
 import { initInfo, onInfoPanelOpen } from './info.js';
 import { copySession, pasteSession, exportFile, importFile } from './session-actions.js';
+import { initSiteCleanup, refreshCleanupSite } from './site-cleanup.js';
 
 function initActions() {
   document.getElementById('copy')?.addEventListener('click', () => void copySession());
@@ -19,5 +20,10 @@ function initActions() {
 
 initPreferences();
 initInfo();
-initNavigation({ onInfoOpen: onInfoPanelOpen });
+initSiteCleanup();
+initNavigation({
+  onInfoOpen: onInfoPanelOpen,
+  onSettingsOpen: refreshCleanupSite,
+  onCleanupOpen: refreshCleanupSite
+});
 initActions();
