@@ -1,0 +1,9 @@
+{
+  "version": "2.3.1",
+  "date": "2026-05-18",
+  "title": "Smaller extension package",
+  "changes": [
+    "Store screenshots and promo images are no longer bundled into the extension — package size dropped from ~3 MB to under 100 KB.",
+    "Only toolbar icons and the popup logo are copied into the build; listing images stay in the repo for the Web Store and docs."
+  ]
+}

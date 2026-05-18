@@ -1,6 +1,6 @@
 {
   "name": "session-copy",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "Copy and restore encrypted login sessions for any website",
   "private": true,
   "type": "module",

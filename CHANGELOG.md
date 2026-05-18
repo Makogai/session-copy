@@ -3,6 +3,11 @@
 All notable changes to **Session Copy** are documented here.  
 Format follows [Keep a Changelog](https://keepachangelog.com/). Version JSON in [`changelog/`](changelog/) powers the in-extension “What’s new” card.
 
+## [2.3.1] — 2026-05-18
+
+### Fixed
+- **Extension package size** — build copies only `assets/icons/` and `assets/images/logo512.png`; Chrome Web Store screenshots and promo images are kept in the repo but excluded from `dist/` (~3 MB → ~80 KB ZIP).
+
 ## [2.3.0] — 2026-05-17
 
 ### Added

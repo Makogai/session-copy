@@ -25,6 +25,18 @@ const esbuildCommon = {
   define: { 'process.env.NODE_ENV': '"production"' }
 };
 
+/** Icons (manifest) + popup logo only — store screenshots stay in repo, not in dist. */
+async function copyExtensionAssets() {
+  await fs.copy(
+    path.join(rootDir, 'assets', 'icons'),
+    path.join(outDir, 'assets', 'icons')
+  );
+  const logoSrc = path.join(rootDir, 'assets', 'images', 'logo512.png');
+  const logoDest = path.join(outDir, 'assets', 'images', 'logo512.png');
+  await fs.ensureDir(path.dirname(logoDest));
+  await fs.copy(logoSrc, logoDest);
+}
+
 async function syncDocsVersion() {
   const versionPath = path.join(rootDir, 'docs', 'version.json');
   await fs.writeJson(versionPath, { version: pkg.version }, { spaces: 2 });
@@ -48,7 +60,7 @@ async function copyStaticFiles() {
 
   await writeDistManifest();
 
-  await fs.copy(path.join(rootDir, 'assets'), path.join(outDir, 'assets'));
+  await copyExtensionAssets();
   await fs.copy(path.join(rootDir, 'changelog'), path.join(outDir, 'changelog'));
 
   const popupDir = path.join(outDir, 'popup');
