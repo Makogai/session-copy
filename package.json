@@ -16,6 +16,7 @@
     "typecheck": "vue-tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
+    "@makogai/extension-brand": "file:../chrome-extensions/packages/brand",
     "vue": "^3.5.34"
   },
   "devDependencies": {

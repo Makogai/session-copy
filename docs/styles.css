@@ -1,55 +1,140 @@
+/* Makogai extension brand tokens */
 :root,
 :root[data-theme="light"] {
   color-scheme: light;
+
   --color-primary: #347cfc;
   --color-primary-hover: #2e93fc;
   --color-primary-soft: #d7e2f7;
+
   --color-accent: #0ac4d4;
+  --color-accent-hover: #08b2c1;
   --color-accent-soft: #e6fbfd;
+  --color-accent-ghost-text: #0891a0;
+  --color-accent-ghost-border: rgba(10, 196, 212, 0.35);
+  --color-accent-ghost-hover-bg: #d4f7fa;
+
   --color-navy: #13284e;
-  --color-text: #13284e;
-  --color-text-muted: #6f7c93;
+
+  --color-blue-soft: #8da7df;
+  --color-blue-light: #93b2ea;
+  --color-blue-pale: #b1c6ee;
+
   --color-bg: #f8faff;
   --color-surface: #ffffff;
   --color-surface-soft: #f1f6ff;
-  --color-header-bg: rgba(248, 250, 255, 0.92);
+
+  --color-text: #13284e;
+  --color-text-muted: #6f7c93;
+  --color-text-light: #ffffff;
+
+  --color-border: #dedfdf;
   --color-border-soft: #e8eef8;
-  --color-blue-pale: #b1c6ee;
-  --color-badge-bg: rgba(255, 255, 255, 0.92);
+
+  --color-danger: #e5484d;
+  --color-danger-hover: #d63d42;
+  --color-danger-soft: #fef2f2;
+  --color-danger-soft-hover: #fde8e8;
+  --color-danger-border: rgba(229, 72, 77, 0.28);
+  --color-danger-border-strong: rgba(229, 72, 77, 0.45);
+  --color-danger-divider: rgba(229, 72, 77, 0.25);
+  --color-danger-card-border: rgba(229, 72, 77, 0.18);
+  --color-danger-card-shadow: rgba(229, 72, 77, 0.06);
+
+  --color-success: #0a9b8e;
+  --color-success-soft: #e6faf8;
+  --color-success-border: rgba(10, 155, 142, 0.25);
+
+  --color-info-callout-border: rgba(10, 196, 212, 0.2);
+  --color-info-callout-accent: #0891a0;
+
   --gradient-primary: linear-gradient(135deg, #347cfc 0%, #2e93fc 55%, #0ac4d4 100%);
+  --gradient-accent: linear-gradient(135deg, #2e93fc 0%, #0ac4d4 100%);
+
   --shadow-soft: 0 8px 24px rgba(19, 40, 78, 0.1);
   --shadow-card: 0 14px 40px rgba(19, 40, 78, 0.12);
   --shadow-button: 0 8px 18px rgba(52, 124, 252, 0.25);
+  --shadow-button-hover: 0 10px 22px rgba(52, 124, 252, 0.32);
+  --shadow-accent: 0 8px 18px rgba(10, 196, 212, 0.22);
+  --shadow-accent-hover: 0 10px 22px rgba(10, 196, 212, 0.3);
+  --shadow-nav: 0 -4px 20px rgba(19, 40, 78, 0.06);
+  --shadow-toggle-thumb: 0 1px 3px rgba(19, 40, 78, 0.2);
+
+  --radius-sm: 8px;
   --radius-md: 14px;
   --radius-lg: 20px;
-  --radius-sm: 8px;
+
   --font: "Segoe UI", ui-sans-serif, system-ui, -apple-system, Roboto, sans-serif;
   --ease: cubic-bezier(0.4, 0, 0.2, 1);
   --dur: 180ms;
+  /* Docs site */
+  --color-header-bg: rgba(248, 250, 255, 0.92);
+  --color-badge-bg: rgba(255, 255, 255, 0.92);
+
 }
 
+/* Dark — same brand hues, navy-tinted surfaces */
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
     --color-primary: #4d8fff;
     --color-primary-hover: #6ba3ff;
     --color-primary-soft: #1a3058;
+
     --color-accent: #2dd4e8;
+    --color-accent-hover: #5ee7f7;
     --color-accent-soft: #0f2e36;
+    --color-accent-ghost-text: #5eead4;
+    --color-accent-ghost-border: rgba(45, 212, 232, 0.35);
+    --color-accent-ghost-hover-bg: #123840;
+
     --color-navy: #e8eef8;
-    --color-text: #e8eef8;
-    --color-text-muted: #94a3b8;
+
+    --color-blue-soft: #6b8fc4;
+    --color-blue-light: #7da0d4;
+    --color-blue-pale: #3d5580;
+
     --color-bg: #0c1220;
     --color-surface: #151d2e;
     --color-surface-soft: #1a2438;
-    --color-header-bg: rgba(12, 18, 32, 0.92);
+
+    --color-text: #e8eef8;
+    --color-text-muted: #94a3b8;
+    --color-text-light: #ffffff;
+
+    --color-border: #2a3548;
     --color-border-soft: #243044;
-    --color-blue-pale: #3d5580;
-    --color-badge-bg: rgba(21, 29, 46, 0.92);
+
+    --color-danger: #f87171;
+    --color-danger-hover: #ef4444;
+    --color-danger-soft: #2a1a1c;
+    --color-danger-soft-hover: #3a2226;
+    --color-danger-border: rgba(248, 113, 113, 0.35);
+    --color-danger-border-strong: rgba(248, 113, 113, 0.5);
+    --color-danger-divider: rgba(248, 113, 113, 0.28);
+    --color-danger-card-border: rgba(248, 113, 113, 0.22);
+    --color-danger-card-shadow: rgba(0, 0, 0, 0.25);
+
+    --color-success: #2dd4bf;
+    --color-success-soft: #0f2a28;
+    --color-success-border: rgba(45, 212, 191, 0.3);
+
+    --color-info-callout-border: rgba(45, 212, 232, 0.22);
+    --color-info-callout-accent: #5eead4;
+
     --gradient-primary: linear-gradient(135deg, #347cfc 0%, #2e93fc 50%, #0ac4d4 100%);
+    --gradient-accent: linear-gradient(135deg, #2e93fc 0%, #2dd4e8 100%);
+
     --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.35);
     --shadow-card: 0 14px 40px rgba(0, 0, 0, 0.4);
     --shadow-button: 0 8px 18px rgba(52, 124, 252, 0.35);
+    --shadow-button-hover: 0 10px 22px rgba(52, 124, 252, 0.45);
+    --shadow-accent: 0 8px 18px rgba(45, 212, 232, 0.28);
+    --shadow-accent-hover: 0 10px 22px rgba(45, 212, 232, 0.38);
+    --shadow-nav: 0 -4px 20px rgba(0, 0, 0, 0.35);
+    --shadow-toggle-thumb: 0 1px 3px rgba(0, 0, 0, 0.45);
+    --color-header-bg: rgba(12, 18, 32, 0.92);
+    --color-badge-bg: rgba(21, 29, 46, 0.92);
   }
 }
 
@@ -58,23 +143,61 @@
   --color-primary: #4d8fff;
   --color-primary-hover: #6ba3ff;
   --color-primary-soft: #1a3058;
+
   --color-accent: #2dd4e8;
+  --color-accent-hover: #5ee7f7;
   --color-accent-soft: #0f2e36;
+  --color-accent-ghost-text: #5eead4;
+  --color-accent-ghost-border: rgba(45, 212, 232, 0.35);
+  --color-accent-ghost-hover-bg: #123840;
+
   --color-navy: #e8eef8;
-  --color-text: #e8eef8;
-  --color-text-muted: #94a3b8;
+
+  --color-blue-soft: #6b8fc4;
+  --color-blue-light: #7da0d4;
+  --color-blue-pale: #3d5580;
+
   --color-bg: #0c1220;
   --color-surface: #151d2e;
   --color-surface-soft: #1a2438;
-  --color-header-bg: rgba(12, 18, 32, 0.92);
+
+  --color-text: #e8eef8;
+  --color-text-muted: #94a3b8;
+  --color-text-light: #ffffff;
+
+  --color-border: #2a3548;
   --color-border-soft: #243044;
-  --color-blue-pale: #3d5580;
-  --color-badge-bg: rgba(21, 29, 46, 0.92);
+
+  --color-danger: #f87171;
+  --color-danger-hover: #ef4444;
+  --color-danger-soft: #2a1a1c;
+  --color-danger-soft-hover: #3a2226;
+  --color-danger-border: rgba(248, 113, 113, 0.35);
+  --color-danger-border-strong: rgba(248, 113, 113, 0.5);
+  --color-danger-divider: rgba(248, 113, 113, 0.28);
+  --color-danger-card-border: rgba(248, 113, 113, 0.22);
+  --color-danger-card-shadow: rgba(0, 0, 0, 0.25);
+
+  --color-success: #2dd4bf;
+  --color-success-soft: #0f2a28;
+  --color-success-border: rgba(45, 212, 191, 0.3);
+
+  --color-info-callout-border: rgba(45, 212, 232, 0.22);
+  --color-info-callout-accent: #5eead4;
+
   --gradient-primary: linear-gradient(135deg, #347cfc 0%, #2e93fc 50%, #0ac4d4 100%);
+  --gradient-accent: linear-gradient(135deg, #2e93fc 0%, #2dd4e8 100%);
+
   --shadow-soft: 0 8px 24px rgba(0, 0, 0, 0.35);
   --shadow-card: 0 14px 40px rgba(0, 0, 0, 0.4);
   --shadow-button: 0 8px 18px rgba(52, 124, 252, 0.35);
+  --shadow-button-hover: 0 10px 22px rgba(52, 124, 252, 0.45);
+  --shadow-accent: 0 8px 18px rgba(45, 212, 232, 0.28);
+  --shadow-accent-hover: 0 10px 22px rgba(45, 212, 232, 0.38);
+  --shadow-nav: 0 -4px 20px rgba(0, 0, 0, 0.35);
+  --shadow-toggle-thumb: 0 1px 3px rgba(0, 0, 0, 0.45);
 }
+
 *,
 *::before,
 *::after {
@@ -686,3 +809,4 @@ section {
     font-size: 0.65rem;
   }
 }
+
